@@ -1,0 +1,149 @@
+site_name: Kubernetes — Camadas do Cluster
+site_description: Roadmap de estudo Kubernetes bottom-up para quem já operou clusters e quer entender os internals
+site_author: RhuanCSG
+site_url: https://rhuancsg.github.io/clean-kubernetes/
+repo_name: clean-kubernetes
+repo_url: https://github.com/RhuanCSG/clean-kubernetes
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Alternar para modo escuro
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Alternar para modo claro
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+    - toc.integrate
+
+plugins:
+  - search:
+      lang:
+        - pt
+        - en
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - def_list
+  - footnotes
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/RhuanCSG
+  analytics:
+    feedback:
+      title: Esta página foi útil?
+      ratings:
+        - icon: material/thumb-up-outline
+          name: Sim
+          data: 1
+          note: Obrigado pelo feedback!
+        - icon: material/thumb-down-outline
+          name: Não
+          data: 0
+          note: Obrigado pelo feedback!
+
+nav:
+  - Início: index.md
+  - Roadmap: roadmap.md
+  - Setup:
+    - Visão Geral: setup/index.md
+    - minikube (Fases 1-6): setup/minikube.md
+    - kind multi-nó (Fases 7-8): setup/kind.md
+  - "01. Pod & Runtime":
+    - Visão Geral: fase-01-pod-runtime/index.md
+    - Pod e Containers: fase-01-pod-runtime/pod.md
+    - Namespaces: fase-01-pod-runtime/namespace.md
+    - InitContainers: fase-01-pod-runtime/init-containers.md
+    - Probes: fase-01-pod-runtime/probes.md
+    - Debugging: fase-01-pod-runtime/debugging.md
+  - "02. Controllers":
+    - Visão Geral: fase-02-workload-controllers/index.md
+    - Deployment: fase-02-workload-controllers/deployment.md
+    - StatefulSet: fase-02-workload-controllers/statefulset.md
+    - DaemonSet: fase-02-workload-controllers/daemonset.md
+    - Job & CronJob: fase-02-workload-controllers/job-cronjob.md
+    - Debugging: fase-02-workload-controllers/debugging.md
+  - "03. Networking":
+    - Visão Geral: fase-03-networking/index.md
+    - Services: fase-03-networking/services.md
+    - Ingress: fase-03-networking/ingress.md
+    - NetworkPolicy: fase-03-networking/network-policy.md
+    - DNS Interno: fase-03-networking/dns.md
+    - Debugging: fase-03-networking/debugging.md
+  - "04. Config & Secrets":
+    - Visão Geral: fase-04-config-secrets/index.md
+    - ConfigMap: fase-04-config-secrets/configmap.md
+    - Secret: fase-04-config-secrets/secret.md
+    - Injeção em Pods: fase-04-config-secrets/injection.md
+    - Debugging: fase-04-config-secrets/debugging.md
+  - "05. Storage":
+    - Visão Geral: fase-05-storage/index.md
+    - PV e PVC: fase-05-storage/pv-pvc.md
+    - StorageClass: fase-05-storage/storage-class.md
+    - Volumes Temporários: fase-05-storage/temp-volumes.md
+    - Debugging: fase-05-storage/debugging.md
+  - "06. RBAC":
+    - Visão Geral: fase-06-rbac/index.md
+    - ServiceAccount: fase-06-rbac/service-account.md
+    - Role e ClusterRole: fase-06-rbac/roles.md
+    - Bindings: fase-06-rbac/bindings.md
+    - Debugging: fase-06-rbac/debugging.md
+  - "07. Scheduling":
+    - Visão Geral: fase-07-scheduling/index.md
+    - Requests e Limits: fase-07-scheduling/resources.md
+    - LimitRange e Quota: fase-07-scheduling/limitrange-quota.md
+    - Taints e Tolerations: fase-07-scheduling/taints.md
+    - Affinity: fase-07-scheduling/affinity.md
+    - HPA: fase-07-scheduling/hpa.md
+    - Debugging: fase-07-scheduling/debugging.md
+  - "08. Control Plane":
+    - Visão Geral: fase-08-control-plane/index.md
+    - Componentes: fase-08-control-plane/components.md
+    - Fluxo de Criação: fase-08-control-plane/pod-flow.md
+    - Debugging: fase-08-control-plane/debugging.md
