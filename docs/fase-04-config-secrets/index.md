@@ -1,6 +1,6 @@
 # Fase 04 — Configuração & Segredos
 
-**Camada:** config | **Estimativa:** ~2 semanas | **Ambiente:** minikube
+**Camada:** config | **Estimativa:** ~2 semanas | **Ambiente:** kind
 
 Separar configuração do código é um princípio central de aplicações cloud-native. Esta fase cobre como o Kubernetes armazena e injeta configuração em containers.
 
@@ -44,7 +44,7 @@ ConfigMap e Secret resolvem esses problemas: a configuração fica em objetos se
 
 Criar um ConfigMap com arquivo de configuração, montá-lo como volume e observar a propagação automática ao editar o ConfigMap.
 
-Ver: `phases/04-config-secrets/labs/lab.md` no repositório.
+Ver: `fases/04-config-secrets/labs/lab.md` no repositório.
 
 ---
 

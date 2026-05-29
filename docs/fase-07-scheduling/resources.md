@@ -72,21 +72,35 @@ O Kubernetes classifica Pods em classes de QoS baseado nos resources definidos:
 | `Burstable` | `requests < limits` (mais comum) | Removido após BestEffort |
 | `BestEffort` | Sem `requests` nem `limits` | Primeiro a ser removido |
 
-```bash
-kubectl describe pod <nome> | grep QoS
-# Windows (PowerShell): kubectl describe pod <nome> | Select-String "QoS"
-# QoS Class: Burstable
-```
+=== "Linux / macOS"
+    ```bash
+    kubectl describe pod <nome> | grep QoS
+    # QoS Class: Burstable
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe pod <nome> | Select-String "QoS"
+    # QoS Class: Burstable
+    ```
 
 ---
 
 ## Diagnóstico de recursos
 
-```bash
-# Ver recursos alocados vs. disponíveis por nó
-kubectl describe nodes | grep -A6 "Allocated resources"
-# Windows (PowerShell): kubectl describe nodes | Select-String -Context 0,6 "Allocated resources"
+=== "Linux / macOS"
+    ```bash
+    # Ver recursos alocados vs. disponíveis por nó
+    kubectl describe nodes | grep -A6 "Allocated resources"
+    ```
 
+=== "Windows (PowerShell)"
+    ```powershell
+    # Ver recursos alocados vs. disponíveis por nó
+    kubectl describe nodes | Select-String -Context 0,6 "Allocated resources"
+    ```
+
+```bash
 # Ver uso real (requer metrics-server)
 kubectl top nodes
 kubectl top pods

@@ -34,16 +34,33 @@ O container usou mais memória do que o `limits.memory` permitia. O kernel Linux
 
 ### Como investigar
 
+=== "Linux / macOS"
+    ```bash
+    kubectl describe pod oom-pod | grep -A5 "Last State"
+    # Reason: OOMKilled    ← confirmação
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe pod oom-pod | Select-String -Context 0,5 "Last State"
+    # Reason: OOMKilled    ← confirmação
+    ```
+
+=== "Linux / macOS"
+    ```bash
+    kubectl describe pod oom-pod | grep -A4 "Limits"
+    # Limits:
+    #   memory: 5Mi        ← muito baixo para o nginx
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe pod oom-pod | Select-String -Context 0,4 "Limits"
+    # Limits:
+    #   memory: 5Mi        ← muito baixo para o nginx
+    ```
+
 ```bash
-kubectl describe pod oom-pod | grep -A5 "Last State"
-# Windows (PowerShell): kubectl describe pod oom-pod | Select-String -Context 0,5 "Last State"
-# Reason: OOMKilled    ← confirmação
-
-kubectl describe pod oom-pod | grep -A4 "Limits"
-# Windows (PowerShell): kubectl describe pod oom-pod | Select-String -Context 0,4 "Limits"
-# Limits:
-#   memory: 5Mi        ← muito baixo para o nginx
-
 kubectl top pod oom-pod --containers    # uso real (se ainda estiver rodando)
 ```
 
@@ -62,11 +79,19 @@ resources:
 ### Cenário de prática
 
 ```bash
-kubectl apply -f phases/07-scheduling/debugging/01-oomkilled/broken.yaml
+kubectl apply -f fases/07-scheduling/debugging/01-oomkilled/broken.yaml
 kubectl get pod oom-pod -w
-kubectl describe pod oom-pod | grep -A5 "Last State"
-# Windows (PowerShell): kubectl describe pod oom-pod | Select-String -Context 0,5 "Last State"
 ```
+
+=== "Linux / macOS"
+    ```bash
+    kubectl describe pod oom-pod | grep -A5 "Last State"
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe pod oom-pod | Select-String -Context 0,5 "Last State"
+    ```
 
 ---
 
@@ -93,17 +118,33 @@ O único nó worker tem um taint `env=prod:NoSchedule` e o Pod não tem a tolera
 
 ### Como investigar
 
-```bash
-# Ver taints em todos os nós
-kubectl describe nodes | grep Taints
-# Windows (PowerShell): kubectl describe nodes | Select-String "Taints"
-# Taints: env=prod:NoSchedule
+Ver taints em todos os nós:
 
-# Confirmar que o Pod não tem toleration
-kubectl get pod pending-pod -o yaml | grep -A5 tolerations
-# Windows (PowerShell): kubectl get pod pending-pod -o yaml | Select-String -Context 0,5 "tolerations"
-# (vazio ou ausente)
-```
+=== "Linux / macOS"
+    ```bash
+    kubectl describe nodes | grep Taints
+    # Taints: env=prod:NoSchedule
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe nodes | Select-String "Taints"
+    # Taints: env=prod:NoSchedule
+    ```
+
+Confirmar que o Pod não tem toleration:
+
+=== "Linux / macOS"
+    ```bash
+    kubectl get pod pending-pod -o yaml | grep -A5 tolerations
+    # (vazio ou ausente)
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl get pod pending-pod -o yaml | Select-String -Context 0,5 "tolerations"
+    # (vazio ou ausente)
+    ```
 
 ### A correção
 
@@ -124,7 +165,7 @@ spec:
 # Pré-requisito: adicionar taint no nó worker
 kubectl taint nodes k8s-study-worker env=prod:NoSchedule
 
-kubectl apply -f phases/07-scheduling/debugging/02-pending-taint/broken.yaml
+kubectl apply -f fases/07-scheduling/debugging/02-pending-taint/broken.yaml
 kubectl get pod pending-pod
 kubectl describe pod pending-pod
 ```
@@ -144,19 +185,37 @@ kubectl describe pod grande-pod
 
 ### Como investigar
 
-```bash
-# Ver capacidade e uso atual dos nós
-kubectl describe nodes | grep -A8 "Allocated resources"
-# Windows (PowerShell): kubectl describe nodes | Select-String -Context 0,8 "Allocated resources"
-# Resource           Requests    Limits
-# cpu                1800m/2     2200m/2    ← quase no limite
-# memory             1500Mi/2Gi  2Gi/2Gi
+Ver capacidade e uso atual dos nós:
 
-# Ver requests do Pod que não consegue alocar
-kubectl get pod grande-pod -o yaml | grep -A4 requests
-# Windows (PowerShell): kubectl get pod grande-pod -o yaml | Select-String -Context 0,4 "requests"
-# cpu: 500m    ← não cabe no nó com 200m livre
-```
+=== "Linux / macOS"
+    ```bash
+    kubectl describe nodes | grep -A8 "Allocated resources"
+    # Resource           Requests    Limits
+    # cpu                1800m/2     2200m/2    ← quase no limite
+    # memory             1500Mi/2Gi  2Gi/2Gi
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe nodes | Select-String -Context 0,8 "Allocated resources"
+    # Resource           Requests    Limits
+    # cpu                1800m/2     2200m/2    ← quase no limite
+    # memory             1500Mi/2Gi  2Gi/2Gi
+    ```
+
+Ver requests do Pod que não consegue alocar:
+
+=== "Linux / macOS"
+    ```bash
+    kubectl get pod grande-pod -o yaml | grep -A4 requests
+    # cpu: 500m    ← não cabe no nó com 200m livre
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl get pod grande-pod -o yaml | Select-String -Context 0,4 "requests"
+    # cpu: 500m    ← não cabe no nó com 200m livre
+    ```
 
 ### A correção
 
@@ -166,19 +225,43 @@ Reduzir os requests ou adicionar um nó ao cluster.
 
 ## Referência rápida
 
+=== "Linux / macOS"
+    ```bash
+    # Mensagem completa do scheduler
+    kubectl describe pod <nome> | grep -A5 "Events"
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # Mensagem completa do scheduler
+    kubectl describe pod <nome> | Select-String -Context 0,5 "Events"
+    ```
+
+=== "Linux / macOS"
+    ```bash
+    # Recursos alocados por nó
+    kubectl describe nodes | grep -A10 "Allocated resources"
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # Recursos alocados por nó
+    kubectl describe nodes | Select-String -Context 0,10 "Allocated resources"
+    ```
+
+=== "Linux / macOS"
+    ```bash
+    # Taints em todos os nós
+    kubectl describe nodes | grep Taints
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # Taints em todos os nós
+    kubectl describe nodes | Select-String "Taints"
+    ```
+
 ```bash
-# Mensagem completa do scheduler
-kubectl describe pod <nome> | grep -A5 "Events"
-# Windows (PowerShell): kubectl describe pod <nome> | Select-String -Context 0,5 "Events"
-
-# Recursos alocados por nó
-kubectl describe nodes | grep -A10 "Allocated resources"
-# Windows (PowerShell): kubectl describe nodes | Select-String -Context 0,10 "Allocated resources"
-
-# Taints em todos os nós
-kubectl describe nodes | grep Taints
-# Windows (PowerShell): kubectl describe nodes | Select-String "Taints"
-
 # Uso real de recursos
 kubectl top nodes
 kubectl top pods

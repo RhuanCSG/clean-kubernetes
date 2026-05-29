@@ -91,6 +91,12 @@ kubectl exec app-configurado -- cat /etc/config/config.yaml
 # Editar o ConfigMap
 kubectl edit configmap app-config
 # Mude LOG_LEVEL de "info" para "debug" e salve
+```
+
+!!! tip "Editor no Windows"
+    Por padrão, `kubectl edit` abre o Notepad no Windows. Para usar o VS Code: `$env:KUBE_EDITOR = "code --wait"` (execute antes de chamar `kubectl edit`).
+
+```bash
 
 # Aguardar ~60 segundos e verificar o arquivo
 kubectl exec app-configurado -- cat /etc/config/config.yaml

@@ -35,11 +35,18 @@ rules:
 | `"autoscaling"` | HorizontalPodAutoscaler |
 
 Para descobrir o API group de um recurso:
-```bash
-kubectl api-resources | grep deployment
-# Windows (PowerShell): kubectl api-resources | Select-String "deployment"
-# deployments   apps   true   Deployment
-```
+
+=== "Linux / macOS"
+    ```bash
+    kubectl api-resources | grep deployment
+    # deployments   apps   true   Deployment
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl api-resources | Select-String "deployment"
+    # deployments   apps   true   Deployment
+    ```
 
 ---
 
@@ -87,17 +94,13 @@ rules:
 
 ```bash
 # Testar permissão de uma SA específica
-kubectl auth can-i list pods \
-  --as=system:serviceaccount:default:minha-sa
+kubectl auth can-i list pods --as=system:serviceaccount:default:minha-sa
 
 # Testar em namespace específico
-kubectl auth can-i create deployments \
-  --as=system:serviceaccount:producao:deploy-sa \
-  -n producao
+kubectl auth can-i create deployments --as=system:serviceaccount:producao:deploy-sa -n producao
 
 # Ver todas as permissões de uma SA
-kubectl auth can-i --list \
-  --as=system:serviceaccount:default:minha-sa
+kubectl auth can-i --list --as=system:serviceaccount:default:minha-sa
 ```
 
 ---

@@ -51,8 +51,7 @@ Toda fase segue o mesmo formato:
 
 | Ferramenta | Fases |
 |---|---|
-| minikube | 1 a 6 — single-node, fácil de resetar |
-| kind multi-nó | 7 e 8 — necessário para taints, affinity e control plane |
+| kind | 1 a 8 — todos os cenários, topologia real |
 
 ## Por onde começar?
 

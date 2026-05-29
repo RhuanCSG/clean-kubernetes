@@ -1,21 +1,22 @@
 # Setup — Ambiente de Prática
 
-Este repositório usa dois ambientes diferentes dependendo da fase. Ambos rodam localmente usando Docker.
+Este repositório usa **kind** (Kubernetes in Docker) como ambiente de prática em todas as 8 fases.
 
 ---
 
-## Qual ambiente usar?
+## Por que kind?
 
-| Ferramenta | Fases | Por quê |
-|---|---|---|
-| **minikube** | 1 a 6 | Cluster single-node, fácil de instalar e resetar. Suficiente para aprender pods, controllers, rede, config, storage e RBAC. |
-| **kind** (multi-nó) | 7 e 8 | Permite criar clusters com múltiplos nós localmente. Necessário para testar taints, affinity e comportamentos do scheduler. |
+kind cria clusters Kubernetes reais localmente, onde cada nó é um container Docker. É o mesmo ambiente usado pelo projeto Kubernetes para seus próprios testes de integração.
+
+- **Uma única ferramenta** para todas as fases
+- **Topologia real**: control-plane separado dos workers
+- **Comportamento consistente** em Windows, Linux e macOS
 
 ---
 
-## Pré-requisito comum
+## Pré-requisito
 
-Ambas as ferramentas precisam de **Docker** instalado e rodando.
+Docker Desktop instalado e rodando:
 
 ```bash
 docker --version
@@ -24,16 +25,7 @@ docker --version
 
 ---
 
-## Guias de configuração
-
-1. **[minikube](minikube.md)** — Para as fases 1 a 6
-2. **[kind multi-nó](kind.md)** — Para as fases 7 e 8
-
----
-
 ## Verificando kubectl
-
-Ambos os ambientes precisam do `kubectl` instalado:
 
 ```bash
 kubectl version --client
@@ -41,4 +33,10 @@ kubectl version --client
 ```
 
 !!! tip "kubectl com Docker Desktop"
-    Se você tem Docker Desktop instalado, o `kubectl` geralmente já vem incluído. Verifique com `kubectl version --client`.
+    Se você tem Docker Desktop instalado, o `kubectl` geralmente já vem incluído.
+
+---
+
+## Configurando o ambiente
+
+➡️ [Setup do kind](kind.md) — instalar kind, criar o cluster e configurar os addons por fase

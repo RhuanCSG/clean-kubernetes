@@ -1,10 +1,10 @@
 # Kubernetes Roadmap — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Para agentes:** implementar este plano tarefa por tarefa seguindo a ordem dos steps e marcando checkboxes ao concluir.
 
 **Goal:** Criar um repositório de estudo Kubernetes bottom-up com READMEs teóricos, YAMLs anotados, labs práticos e cenários de debugging para cada camada do cluster.
 
-**Architecture:** Cada fase vive em `phases/NN-nome/` com quatro subdiretórios fixos: `yaml/` (referências anotadas), `labs/` (lab prático), `debugging/` (cenários quebrados + soluções) e um `README.md` de teoria. A estrutura é idêntica entre fases para facilitar navegação.
+**Architecture:** Cada fase vive em `fases/NN-nome/` com quatro subdiretórios fixos: `yaml/` (referências anotadas), `labs/` (lab prático), `debugging/` (cenários quebrados + soluções) e um `README.md` de teoria. A estrutura é idêntica entre fases para facilitar navegação.
 
 **Tech Stack:** Kubernetes (kubectl), minikube (fases 1-6), kind multi-nó (fases 7-8), YAML puro.
 
@@ -18,7 +18,7 @@ setup/
   minikube.md
   kind.md
   kind-config.yaml
-phases/
+fases/
   01-pod-runtime/
     README.md
     yaml/pod-reference.yaml
@@ -111,7 +111,7 @@ phases/
 # Kubernetes Study — Camadas do Cluster
 
 Repositório de estudo prático de Kubernetes, organizado bottom-up: cada pasta em
-`phases/` representa uma camada de abstração do cluster.
+`fases/` representa uma camada de abstração do cluster.
 
 ## Como usar
 
@@ -272,16 +272,16 @@ git commit -m "chore: setup inicial do repositório de estudo k8s"
 ## Task 1: Fase 01 — Pod & Container Runtime
 
 **Files:**
-- Create: `phases/01-pod-runtime/README.md`
-- Create: `phases/01-pod-runtime/yaml/pod-reference.yaml`
-- Create: `phases/01-pod-runtime/labs/lab.md`
-- Create: `phases/01-pod-runtime/debugging/README.md`
-- Create: `phases/01-pod-runtime/debugging/01-crashloop/broken.yaml`
-- Create: `phases/01-pod-runtime/debugging/01-crashloop/solution.yaml`
-- Create: `phases/01-pod-runtime/debugging/02-imagepull/broken.yaml`
-- Create: `phases/01-pod-runtime/debugging/02-imagepull/solution.yaml`
+- Create: `fases/01-pod-runtime/README.md`
+- Create: `fases/01-pod-runtime/yaml/pod-reference.yaml`
+- Create: `fases/01-pod-runtime/labs/lab.md`
+- Create: `fases/01-pod-runtime/debugging/README.md`
+- Create: `fases/01-pod-runtime/debugging/01-crashloop/broken.yaml`
+- Create: `fases/01-pod-runtime/debugging/01-crashloop/solution.yaml`
+- Create: `fases/01-pod-runtime/debugging/02-imagepull/broken.yaml`
+- Create: `fases/01-pod-runtime/debugging/02-imagepull/solution.yaml`
 
-- [ ] **Step 1: Criar phases/01-pod-runtime/README.md**
+- [ ] **Step 1: Criar fases/01-pod-runtime/README.md**
 
 ```markdown
 # Fase 01 — Pod & Container Runtime
@@ -340,7 +340,7 @@ Você consegue:
 - [ ] Explicar a diferença entre `livenessProbe` e `readinessProbe` com suas próprias palavras
 ```
 
-- [ ] **Step 2: Criar phases/01-pod-runtime/yaml/pod-reference.yaml**
+- [ ] **Step 2: Criar fases/01-pod-runtime/yaml/pod-reference.yaml**
 
 ```yaml
 # YAML de Referência — Pod
@@ -394,7 +394,7 @@ spec:
 - [ ] **Step 3: Aplicar o YAML e verificar**
 
 ```bash
-kubectl apply -f phases/01-pod-runtime/yaml/pod-reference.yaml
+kubectl apply -f fases/01-pod-runtime/yaml/pod-reference.yaml
 kubectl get pod pod-referencia -w
 ```
 
@@ -413,7 +413,7 @@ kubectl logs pod-referencia -c app
 kubectl delete pod pod-referencia
 ```
 
-- [ ] **Step 4: Criar phases/01-pod-runtime/labs/lab.md**
+- [ ] **Step 4: Criar fases/01-pod-runtime/labs/lab.md**
 
 ```markdown
 # Lab 01 — Inspecionando um Pod Vivo
@@ -474,7 +474,7 @@ Crie um segundo Pod (sem usar o YAML de referência, escreva do zero) com:
 Verifique com `kubectl get pod -l app=meu-pod`.
 ```
 
-- [ ] **Step 5: Criar phases/01-pod-runtime/debugging/README.md**
+- [ ] **Step 5: Criar fases/01-pod-runtime/debugging/README.md**
 
 ```markdown
 # Debugging — Fase 01
@@ -626,24 +626,24 @@ spec:
 
 ```bash
 # Teste 01-crashloop
-kubectl apply -f phases/01-pod-runtime/debugging/01-crashloop/broken.yaml
+kubectl apply -f fases/01-pod-runtime/debugging/01-crashloop/broken.yaml
 kubectl get pod crash-pod -w
 # aguardar aparecer CrashLoopBackOff (30-60s)
 kubectl describe pod crash-pod
 kubectl delete pod crash-pod
 
-kubectl apply -f phases/01-pod-runtime/debugging/01-crashloop/solution.yaml
+kubectl apply -f fases/01-pod-runtime/debugging/01-crashloop/solution.yaml
 kubectl get pod crash-pod-fixed -w
 # deve ficar Running
 kubectl delete pod crash-pod-fixed
 
 # Teste 02-imagepull
-kubectl apply -f phases/01-pod-runtime/debugging/02-imagepull/broken.yaml
+kubectl apply -f fases/01-pod-runtime/debugging/02-imagepull/broken.yaml
 kubectl get pod pull-fail-pod -w
 # deve mostrar ImagePullBackOff ou ErrImagePull
 kubectl delete pod pull-fail-pod
 
-kubectl apply -f phases/01-pod-runtime/debugging/02-imagepull/solution.yaml
+kubectl apply -f fases/01-pod-runtime/debugging/02-imagepull/solution.yaml
 kubectl get pod pull-ok-pod -w
 # deve ficar Running
 kubectl delete pod pull-ok-pod
@@ -652,7 +652,7 @@ kubectl delete pod pull-ok-pod
 - [ ] **Step 11: Commit**
 
 ```bash
-git add phases/01-pod-runtime/
+git add fases/01-pod-runtime/
 git commit -m "feat: fase 01 - pod e container runtime"
 ```
 
@@ -661,20 +661,20 @@ git commit -m "feat: fase 01 - pod e container runtime"
 ## Task 2: Fase 02 — Workload Controllers
 
 **Files:**
-- Create: `phases/02-workload-controllers/README.md`
-- Create: `phases/02-workload-controllers/yaml/deployment.yaml`
-- Create: `phases/02-workload-controllers/yaml/statefulset.yaml`
-- Create: `phases/02-workload-controllers/yaml/daemonset.yaml`
-- Create: `phases/02-workload-controllers/yaml/job.yaml`
-- Create: `phases/02-workload-controllers/yaml/cronjob.yaml`
-- Create: `phases/02-workload-controllers/labs/lab.md`
-- Create: `phases/02-workload-controllers/debugging/README.md`
-- Create: `phases/02-workload-controllers/debugging/01-rolling-stuck/broken.yaml`
-- Create: `phases/02-workload-controllers/debugging/01-rolling-stuck/solution.yaml`
-- Create: `phases/02-workload-controllers/debugging/02-statefulset-pvc/broken.yaml`
-- Create: `phases/02-workload-controllers/debugging/02-statefulset-pvc/solution.yaml`
+- Create: `fases/02-workload-controllers/README.md`
+- Create: `fases/02-workload-controllers/yaml/deployment.yaml`
+- Create: `fases/02-workload-controllers/yaml/statefulset.yaml`
+- Create: `fases/02-workload-controllers/yaml/daemonset.yaml`
+- Create: `fases/02-workload-controllers/yaml/job.yaml`
+- Create: `fases/02-workload-controllers/yaml/cronjob.yaml`
+- Create: `fases/02-workload-controllers/labs/lab.md`
+- Create: `fases/02-workload-controllers/debugging/README.md`
+- Create: `fases/02-workload-controllers/debugging/01-rolling-stuck/broken.yaml`
+- Create: `fases/02-workload-controllers/debugging/01-rolling-stuck/solution.yaml`
+- Create: `fases/02-workload-controllers/debugging/02-statefulset-pvc/broken.yaml`
+- Create: `fases/02-workload-controllers/debugging/02-statefulset-pvc/solution.yaml`
 
-- [ ] **Step 1: Criar phases/02-workload-controllers/README.md**
+- [ ] **Step 1: Criar fases/02-workload-controllers/README.md**
 
 ```markdown
 # Fase 02 — Workload Controllers
@@ -1200,13 +1200,13 @@ spec:
 
 ```bash
 # Verificar que os arquivos YAML são válidos (dry-run)
-kubectl apply --dry-run=client -f phases/02-workload-controllers/yaml/deployment.yaml
-kubectl apply --dry-run=client -f phases/02-workload-controllers/yaml/statefulset.yaml
-kubectl apply --dry-run=client -f phases/02-workload-controllers/yaml/daemonset.yaml
-kubectl apply --dry-run=client -f phases/02-workload-controllers/yaml/job.yaml
-kubectl apply --dry-run=client -f phases/02-workload-controllers/yaml/cronjob.yaml
-kubectl apply --dry-run=client -f phases/02-workload-controllers/debugging/01-rolling-stuck/broken.yaml
-kubectl apply --dry-run=client -f phases/02-workload-controllers/debugging/01-rolling-stuck/solution.yaml
+kubectl apply --dry-run=client -f fases/02-workload-controllers/yaml/deployment.yaml
+kubectl apply --dry-run=client -f fases/02-workload-controllers/yaml/statefulset.yaml
+kubectl apply --dry-run=client -f fases/02-workload-controllers/yaml/daemonset.yaml
+kubectl apply --dry-run=client -f fases/02-workload-controllers/yaml/job.yaml
+kubectl apply --dry-run=client -f fases/02-workload-controllers/yaml/cronjob.yaml
+kubectl apply --dry-run=client -f fases/02-workload-controllers/debugging/01-rolling-stuck/broken.yaml
+kubectl apply --dry-run=client -f fases/02-workload-controllers/debugging/01-rolling-stuck/solution.yaml
 ```
 
 Esperado: cada comando retorna `... configured (dry run)` sem erros.
@@ -1214,7 +1214,7 @@ Esperado: cada comando retorna `... configured (dry run)` sem erros.
 - [ ] **Step 14: Commit**
 
 ```bash
-git add phases/02-workload-controllers/
+git add fases/02-workload-controllers/
 git commit -m "feat: fase 02 - workload controllers"
 ```
 
@@ -1223,17 +1223,17 @@ git commit -m "feat: fase 02 - workload controllers"
 ## Task 3: Fase 03 — Networking
 
 **Files:**
-- Create: `phases/03-networking/README.md`
-- Create: `phases/03-networking/yaml/service-clusterip.yaml`
-- Create: `phases/03-networking/yaml/service-nodeport.yaml`
-- Create: `phases/03-networking/yaml/ingress.yaml`
-- Create: `phases/03-networking/yaml/network-policy.yaml`
-- Create: `phases/03-networking/labs/lab.md`
-- Create: `phases/03-networking/debugging/README.md`
-- Create: `phases/03-networking/debugging/01-empty-endpoints/broken.yaml`
-- Create: `phases/03-networking/debugging/01-empty-endpoints/solution.yaml`
+- Create: `fases/03-networking/README.md`
+- Create: `fases/03-networking/yaml/service-clusterip.yaml`
+- Create: `fases/03-networking/yaml/service-nodeport.yaml`
+- Create: `fases/03-networking/yaml/ingress.yaml`
+- Create: `fases/03-networking/yaml/network-policy.yaml`
+- Create: `fases/03-networking/labs/lab.md`
+- Create: `fases/03-networking/debugging/README.md`
+- Create: `fases/03-networking/debugging/01-empty-endpoints/broken.yaml`
+- Create: `fases/03-networking/debugging/01-empty-endpoints/solution.yaml`
 
-- [ ] **Step 1: Criar phases/03-networking/README.md**
+- [ ] **Step 1: Criar fases/03-networking/README.md**
 
 ```markdown
 # Fase 03 — Networking
@@ -1587,12 +1587,12 @@ spec:
 - [ ] **Step 10: Verificar YAMLs com dry-run**
 
 ```bash
-kubectl apply --dry-run=client -f phases/03-networking/yaml/service-clusterip.yaml
-kubectl apply --dry-run=client -f phases/03-networking/yaml/service-nodeport.yaml
-kubectl apply --dry-run=client -f phases/03-networking/yaml/ingress.yaml
-kubectl apply --dry-run=client -f phases/03-networking/yaml/network-policy.yaml
-kubectl apply --dry-run=client -f phases/03-networking/debugging/01-empty-endpoints/broken.yaml
-kubectl apply --dry-run=client -f phases/03-networking/debugging/01-empty-endpoints/solution.yaml
+kubectl apply --dry-run=client -f fases/03-networking/yaml/service-clusterip.yaml
+kubectl apply --dry-run=client -f fases/03-networking/yaml/service-nodeport.yaml
+kubectl apply --dry-run=client -f fases/03-networking/yaml/ingress.yaml
+kubectl apply --dry-run=client -f fases/03-networking/yaml/network-policy.yaml
+kubectl apply --dry-run=client -f fases/03-networking/debugging/01-empty-endpoints/broken.yaml
+kubectl apply --dry-run=client -f fases/03-networking/debugging/01-empty-endpoints/solution.yaml
 ```
 
 Esperado: nenhum erro de validação.
@@ -1600,7 +1600,7 @@ Esperado: nenhum erro de validação.
 - [ ] **Step 11: Commit**
 
 ```bash
-git add phases/03-networking/
+git add fases/03-networking/
 git commit -m "feat: fase 03 - networking"
 ```
 
@@ -1609,16 +1609,16 @@ git commit -m "feat: fase 03 - networking"
 ## Task 4: Fase 04 — Configuração & Segredos
 
 **Files:**
-- Create: `phases/04-config-secrets/README.md`
-- Create: `phases/04-config-secrets/yaml/configmap.yaml`
-- Create: `phases/04-config-secrets/yaml/secret.yaml`
-- Create: `phases/04-config-secrets/yaml/pod-with-config.yaml`
-- Create: `phases/04-config-secrets/labs/lab.md`
-- Create: `phases/04-config-secrets/debugging/README.md`
-- Create: `phases/04-config-secrets/debugging/01-wrong-ref/broken.yaml`
-- Create: `phases/04-config-secrets/debugging/01-wrong-ref/solution.yaml`
+- Create: `fases/04-config-secrets/README.md`
+- Create: `fases/04-config-secrets/yaml/configmap.yaml`
+- Create: `fases/04-config-secrets/yaml/secret.yaml`
+- Create: `fases/04-config-secrets/yaml/pod-with-config.yaml`
+- Create: `fases/04-config-secrets/labs/lab.md`
+- Create: `fases/04-config-secrets/debugging/README.md`
+- Create: `fases/04-config-secrets/debugging/01-wrong-ref/broken.yaml`
+- Create: `fases/04-config-secrets/debugging/01-wrong-ref/solution.yaml`
 
-- [ ] **Step 1: Criar phases/04-config-secrets/README.md**
+- [ ] **Step 1: Criar fases/04-config-secrets/README.md**
 
 ```markdown
 # Fase 04 — Configuração & Segredos
@@ -1886,12 +1886,12 @@ spec:
 - [ ] **Step 9: Verificar com dry-run e commit**
 
 ```bash
-kubectl apply --dry-run=client -f phases/04-config-secrets/yaml/configmap.yaml
-kubectl apply --dry-run=client -f phases/04-config-secrets/yaml/secret.yaml
-kubectl apply --dry-run=client -f phases/04-config-secrets/yaml/pod-with-config.yaml
-kubectl apply --dry-run=client -f phases/04-config-secrets/debugging/01-wrong-ref/broken.yaml
-kubectl apply --dry-run=client -f phases/04-config-secrets/debugging/01-wrong-ref/solution.yaml
-git add phases/04-config-secrets/
+kubectl apply --dry-run=client -f fases/04-config-secrets/yaml/configmap.yaml
+kubectl apply --dry-run=client -f fases/04-config-secrets/yaml/secret.yaml
+kubectl apply --dry-run=client -f fases/04-config-secrets/yaml/pod-with-config.yaml
+kubectl apply --dry-run=client -f fases/04-config-secrets/debugging/01-wrong-ref/broken.yaml
+kubectl apply --dry-run=client -f fases/04-config-secrets/debugging/01-wrong-ref/solution.yaml
+git add fases/04-config-secrets/
 git commit -m "feat: fase 04 - configuracao e segredos"
 ```
 
@@ -1900,15 +1900,15 @@ git commit -m "feat: fase 04 - configuracao e segredos"
 ## Task 5: Fase 05 — Storage
 
 **Files:**
-- Create: `phases/05-storage/README.md`
-- Create: `phases/05-storage/yaml/pvc.yaml`
-- Create: `phases/05-storage/yaml/pod-with-pvc.yaml`
-- Create: `phases/05-storage/labs/lab.md`
-- Create: `phases/05-storage/debugging/README.md`
-- Create: `phases/05-storage/debugging/01-pvc-pending/broken.yaml`
-- Create: `phases/05-storage/debugging/01-pvc-pending/solution.yaml`
+- Create: `fases/05-storage/README.md`
+- Create: `fases/05-storage/yaml/pvc.yaml`
+- Create: `fases/05-storage/yaml/pod-with-pvc.yaml`
+- Create: `fases/05-storage/labs/lab.md`
+- Create: `fases/05-storage/debugging/README.md`
+- Create: `fases/05-storage/debugging/01-pvc-pending/broken.yaml`
+- Create: `fases/05-storage/debugging/01-pvc-pending/solution.yaml`
 
-- [ ] **Step 1: Criar phases/05-storage/README.md**
+- [ ] **Step 1: Criar fases/05-storage/README.md**
 
 ```markdown
 # Fase 05 — Storage
@@ -2138,11 +2138,11 @@ spec:
 - [ ] **Step 8: Verificar e commit**
 
 ```bash
-kubectl apply --dry-run=client -f phases/05-storage/yaml/pvc.yaml
-kubectl apply --dry-run=client -f phases/05-storage/yaml/pod-with-pvc.yaml
-kubectl apply --dry-run=client -f phases/05-storage/debugging/01-pvc-pending/broken.yaml
-kubectl apply --dry-run=client -f phases/05-storage/debugging/01-pvc-pending/solution.yaml
-git add phases/05-storage/
+kubectl apply --dry-run=client -f fases/05-storage/yaml/pvc.yaml
+kubectl apply --dry-run=client -f fases/05-storage/yaml/pod-with-pvc.yaml
+kubectl apply --dry-run=client -f fases/05-storage/debugging/01-pvc-pending/broken.yaml
+kubectl apply --dry-run=client -f fases/05-storage/debugging/01-pvc-pending/solution.yaml
+git add fases/05-storage/
 git commit -m "feat: fase 05 - storage"
 ```
 
@@ -2151,15 +2151,15 @@ git commit -m "feat: fase 05 - storage"
 ## Task 6: Fase 06 — Controle de Acesso (RBAC)
 
 **Files:**
-- Create: `phases/06-rbac/README.md`
-- Create: `phases/06-rbac/yaml/serviceaccount.yaml`
-- Create: `phases/06-rbac/yaml/role-rolebinding.yaml`
-- Create: `phases/06-rbac/labs/lab.md`
-- Create: `phases/06-rbac/debugging/README.md`
-- Create: `phases/06-rbac/debugging/01-403-forbidden/broken.yaml`
-- Create: `phases/06-rbac/debugging/01-403-forbidden/solution.yaml`
+- Create: `fases/06-rbac/README.md`
+- Create: `fases/06-rbac/yaml/serviceaccount.yaml`
+- Create: `fases/06-rbac/yaml/role-rolebinding.yaml`
+- Create: `fases/06-rbac/labs/lab.md`
+- Create: `fases/06-rbac/debugging/README.md`
+- Create: `fases/06-rbac/debugging/01-403-forbidden/broken.yaml`
+- Create: `fases/06-rbac/debugging/01-403-forbidden/solution.yaml`
 
-- [ ] **Step 1: Criar phases/06-rbac/README.md**
+- [ ] **Step 1: Criar fases/06-rbac/README.md**
 
 ```markdown
 # Fase 06 — Controle de Acesso (RBAC)
@@ -2450,11 +2450,11 @@ spec:
 - [ ] **Step 8: Verificar e commit**
 
 ```bash
-kubectl apply --dry-run=client -f phases/06-rbac/yaml/serviceaccount.yaml
-kubectl apply --dry-run=client -f phases/06-rbac/yaml/role-rolebinding.yaml
-kubectl apply --dry-run=client -f phases/06-rbac/debugging/01-403-forbidden/broken.yaml
-kubectl apply --dry-run=client -f phases/06-rbac/debugging/01-403-forbidden/solution.yaml
-git add phases/06-rbac/
+kubectl apply --dry-run=client -f fases/06-rbac/yaml/serviceaccount.yaml
+kubectl apply --dry-run=client -f fases/06-rbac/yaml/role-rolebinding.yaml
+kubectl apply --dry-run=client -f fases/06-rbac/debugging/01-403-forbidden/broken.yaml
+kubectl apply --dry-run=client -f fases/06-rbac/debugging/01-403-forbidden/solution.yaml
+git add fases/06-rbac/
 git commit -m "feat: fase 06 - rbac"
 ```
 
@@ -2463,20 +2463,20 @@ git commit -m "feat: fase 06 - rbac"
 ## Task 7: Fase 07 — Scheduling & Recursos
 
 **Files:**
-- Create: `phases/07-scheduling/README.md`
-- Create: `phases/07-scheduling/yaml/limitrange.yaml`
-- Create: `phases/07-scheduling/yaml/resourcequota.yaml`
-- Create: `phases/07-scheduling/yaml/taint-toleration.yaml`
-- Create: `phases/07-scheduling/yaml/affinity.yaml`
-- Create: `phases/07-scheduling/yaml/hpa.yaml`
-- Create: `phases/07-scheduling/labs/lab.md`
-- Create: `phases/07-scheduling/debugging/README.md`
-- Create: `phases/07-scheduling/debugging/01-oomkilled/broken.yaml`
-- Create: `phases/07-scheduling/debugging/01-oomkilled/solution.yaml`
-- Create: `phases/07-scheduling/debugging/02-pending-taint/broken.yaml`
-- Create: `phases/07-scheduling/debugging/02-pending-taint/solution.yaml`
+- Create: `fases/07-scheduling/README.md`
+- Create: `fases/07-scheduling/yaml/limitrange.yaml`
+- Create: `fases/07-scheduling/yaml/resourcequota.yaml`
+- Create: `fases/07-scheduling/yaml/taint-toleration.yaml`
+- Create: `fases/07-scheduling/yaml/affinity.yaml`
+- Create: `fases/07-scheduling/yaml/hpa.yaml`
+- Create: `fases/07-scheduling/labs/lab.md`
+- Create: `fases/07-scheduling/debugging/README.md`
+- Create: `fases/07-scheduling/debugging/01-oomkilled/broken.yaml`
+- Create: `fases/07-scheduling/debugging/01-oomkilled/solution.yaml`
+- Create: `fases/07-scheduling/debugging/02-pending-taint/broken.yaml`
+- Create: `fases/07-scheduling/debugging/02-pending-taint/solution.yaml`
 
-- [ ] **Step 1: Criar phases/07-scheduling/README.md**
+- [ ] **Step 1: Criar fases/07-scheduling/README.md**
 
 ```markdown
 # Fase 07 — Scheduling & Recursos
@@ -2865,16 +2865,16 @@ spec:
 - [ ] **Step 13: Verificar e commit**
 
 ```bash
-kubectl apply --dry-run=client -f phases/07-scheduling/yaml/limitrange.yaml
-kubectl apply --dry-run=client -f phases/07-scheduling/yaml/resourcequota.yaml
-kubectl apply --dry-run=client -f phases/07-scheduling/yaml/taint-toleration.yaml
-kubectl apply --dry-run=client -f phases/07-scheduling/yaml/affinity.yaml
-kubectl apply --dry-run=client -f phases/07-scheduling/yaml/hpa.yaml
-kubectl apply --dry-run=client -f phases/07-scheduling/debugging/01-oomkilled/broken.yaml
-kubectl apply --dry-run=client -f phases/07-scheduling/debugging/01-oomkilled/solution.yaml
-kubectl apply --dry-run=client -f phases/07-scheduling/debugging/02-pending-taint/broken.yaml
-kubectl apply --dry-run=client -f phases/07-scheduling/debugging/02-pending-taint/solution.yaml
-git add phases/07-scheduling/
+kubectl apply --dry-run=client -f fases/07-scheduling/yaml/limitrange.yaml
+kubectl apply --dry-run=client -f fases/07-scheduling/yaml/resourcequota.yaml
+kubectl apply --dry-run=client -f fases/07-scheduling/yaml/taint-toleration.yaml
+kubectl apply --dry-run=client -f fases/07-scheduling/yaml/affinity.yaml
+kubectl apply --dry-run=client -f fases/07-scheduling/yaml/hpa.yaml
+kubectl apply --dry-run=client -f fases/07-scheduling/debugging/01-oomkilled/broken.yaml
+kubectl apply --dry-run=client -f fases/07-scheduling/debugging/01-oomkilled/solution.yaml
+kubectl apply --dry-run=client -f fases/07-scheduling/debugging/02-pending-taint/broken.yaml
+kubectl apply --dry-run=client -f fases/07-scheduling/debugging/02-pending-taint/solution.yaml
+git add fases/07-scheduling/
 git commit -m "feat: fase 07 - scheduling e recursos"
 ```
 
@@ -2883,11 +2883,11 @@ git commit -m "feat: fase 07 - scheduling e recursos"
 ## Task 8: Fase 08 — Internals do Control Plane
 
 **Files:**
-- Create: `phases/08-control-plane/README.md`
-- Create: `phases/08-control-plane/labs/lab.md`
-- Create: `phases/08-control-plane/debugging/README.md`
+- Create: `fases/08-control-plane/README.md`
+- Create: `fases/08-control-plane/labs/lab.md`
+- Create: `fases/08-control-plane/debugging/README.md`
 
-- [ ] **Step 1: Criar phases/08-control-plane/README.md**
+- [ ] **Step 1: Criar fases/08-control-plane/README.md**
 
 ```markdown
 # Fase 08 — Internals do Control Plane
@@ -3146,7 +3146,7 @@ minikube logs          # logs do próprio minikube
 - [ ] **Step 4: Verificar estrutura completa**
 
 ```bash
-find phases/ -type f | sort
+find fases/ -type f | sort
 ```
 
 Esperado — pelo menos 50 arquivos organizados nas 8 fases.
@@ -3154,7 +3154,7 @@ Esperado — pelo menos 50 arquivos organizados nas 8 fases.
 - [ ] **Step 5: Commit final**
 
 ```bash
-git add phases/08-control-plane/
+git add fases/08-control-plane/
 git commit -m "feat: fase 08 - internals do control plane"
 ```
 

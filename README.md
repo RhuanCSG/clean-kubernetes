@@ -14,18 +14,18 @@ Para quem **já operou clusters Kubernetes** (EKS, GKE, AKS) na prática, mas nu
 
 | # | Fase | Camada | Ambiente | Estimativa |
 |---|---|---|---|---|
-| 01 | Pod & Container Runtime | runtime | minikube | ~2 sem |
-| 02 | Workload Controllers | controllers | minikube | ~3 sem |
-| 03 | Networking | rede | minikube | ~3 sem |
-| 04 | Configuração & Segredos | config | minikube | ~2 sem |
-| 05 | Storage | armazenamento | minikube | ~2 sem |
-| 06 | Controle de Acesso (RBAC) | segurança | minikube | ~2 sem |
-| 07 | Scheduling & Recursos | scheduler | kind multi-nó | ~3 sem |
-| 08 | Internals do Control Plane | control plane | kind multi-nó | ~3 sem |
+| 01 | Pod & Container Runtime | runtime | kind | ~2 sem |
+| 02 | Workload Controllers | controllers | kind | ~3 sem |
+| 03 | Networking | rede | kind | ~3 sem |
+| 04 | Configuração & Segredos | config | kind | ~2 sem |
+| 05 | Storage | armazenamento | kind | ~2 sem |
+| 06 | Controle de Acesso (RBAC) | segurança | kind | ~2 sem |
+| 07 | Scheduling & Recursos | scheduler | kind | ~3 sem |
+| 08 | Internals do Control Plane | control plane | kind | ~3 sem |
 
 ## Como usar
 
-1. Configure o ambiente: veja `setup/minikube.md` (fases 1-6) ou `setup/kind.md` (fases 7-8)
+1. Configure o ambiente: veja `setup/kind.md`
 2. Leia o `README.md` de cada fase antes de abrir qualquer YAML
 3. Aplique os YAMLs de referência em `yaml/` e explore com `kubectl describe` e `kubectl logs`
 4. Execute o lab em `labs/lab.md`
@@ -35,7 +35,7 @@ Para quem **já operou clusters Kubernetes** (EKS, GKE, AKS) na prática, mas nu
 
 ```
 docs/                         # documentação GitHub Pages (MkDocs)
-phases/
+fases/
   01-pod-runtime/
     README.md                 # teoria e critério de conclusão
     yaml/                     # YAMLs anotados com comentários
@@ -49,9 +49,8 @@ phases/
   07-scheduling/
   08-control-plane/
 setup/
-  minikube.md                 # setup do ambiente minikube
-  kind.md                     # setup do ambiente kind
-  kind-config.yaml            # config do cluster kind (1 control-plane + 2 workers)
+  kind.md                     # setup do ambiente kind (todas as fases)
+  kind-config.yaml            # config do cluster (1 control-plane + 2 workers, Calico, Ingress)
 ```
 
 ## Critério de conclusão do roadmap

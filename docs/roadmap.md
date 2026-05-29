@@ -33,7 +33,7 @@ gantt
 
 ## 01. Pod & Container Runtime
 
-**Estimativa:** ~2 semanas | **Ambiente:** minikube
+**Estimativa:** ~2 semanas | **Ambiente:** kind
 
 **Objetivo:** Entender a menor unidade do Kubernetes e como o kubelet gerencia o ciclo de vida dos containers.
 
@@ -50,7 +50,7 @@ gantt
 
 ## 02. Workload Controllers
 
-**Estimativa:** ~3 semanas | **Ambiente:** minikube
+**Estimativa:** ~3 semanas | **Ambiente:** kind
 
 **Objetivo:** Entender como o Kubernetes garante que a carga de trabalho desejada esteja sempre rodando.
 
@@ -67,7 +67,7 @@ gantt
 
 ## 03. Networking
 
-**Estimativa:** ~3 semanas | **Ambiente:** minikube
+**Estimativa:** ~3 semanas | **Ambiente:** kind
 
 **Objetivo:** Entender como Pods se comunicam entre si e como o tráfego externo chega ao cluster.
 
@@ -84,7 +84,7 @@ gantt
 
 ## 04. Configuração & Segredos
 
-**Estimativa:** ~2 semanas | **Ambiente:** minikube
+**Estimativa:** ~2 semanas | **Ambiente:** kind
 
 **Objetivo:** Separar configuração do código e injetar dados sensíveis de forma segura.
 
@@ -100,7 +100,7 @@ gantt
 
 ## 05. Storage
 
-**Estimativa:** ~2 semanas | **Ambiente:** minikube
+**Estimativa:** ~2 semanas | **Ambiente:** kind
 
 **Objetivo:** Entender como o Kubernetes abstrai armazenamento persistente e temporário.
 
@@ -116,7 +116,7 @@ gantt
 
 ## 06. Controle de Acesso (RBAC)
 
-**Estimativa:** ~2 semanas | **Ambiente:** minikube
+**Estimativa:** ~2 semanas | **Ambiente:** kind
 
 **Objetivo:** Entender como o Kubernetes controla quem pode fazer o quê no cluster.
 

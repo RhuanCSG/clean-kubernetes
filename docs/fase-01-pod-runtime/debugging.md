@@ -51,11 +51,11 @@ kubectl logs crash-pod --previous
 
 ### Cenário de prática
 
-Ver `phases/01-pod-runtime/debugging/01-crashloop/` no repositório:
+Ver `fases/01-pod-runtime/debugging/01-crashloop/` no repositório:
 
 ```bash
 # Aplicar o manifesto com problema
-kubectl apply -f phases/01-pod-runtime/debugging/01-crashloop/broken.yaml
+kubectl apply -f fases/01-pod-runtime/debugging/01-crashloop/broken.yaml
 
 # Investigar
 kubectl get pod crash-pod -w
@@ -63,7 +63,7 @@ kubectl describe pod crash-pod
 kubectl logs crash-pod --previous
 
 # Após encontrar o problema, comparar com a solução
-# phases/01-pod-runtime/debugging/01-crashloop/solution.yaml
+# fases/01-pod-runtime/debugging/01-crashloop/solution.yaml
 ```
 
 ---
@@ -100,7 +100,7 @@ kubectl describe pod pull-fail-pod
 ### Cenário de prática
 
 ```bash
-kubectl apply -f phases/01-pod-runtime/debugging/02-imagepull/broken.yaml
+kubectl apply -f fases/01-pod-runtime/debugging/02-imagepull/broken.yaml
 kubectl describe pod pull-fail-pod
 # Identifique qual tag está errada nos Events
 ```
@@ -137,10 +137,15 @@ kubectl describe pod meu-pod
 | PVC não provisionado | Pod aguarda PVC — veja `kubectl get pvc` |
 
 !!! tip "Para ver recursos disponíveis nos nós"
-    ```bash
-    kubectl describe nodes | grep -A5 "Allocated resources"
-    # Windows (PowerShell): kubectl describe nodes | Select-String -Context 0,5 "Allocated resources"
-    ```
+    === "Linux / macOS"
+        ```bash
+        kubectl describe nodes | grep -A5 "Allocated resources"
+        ```
+
+    === "Windows (PowerShell)"
+        ```powershell
+        kubectl describe nodes | Select-String -Context 0,5 "Allocated resources"
+        ```
 
 ---
 

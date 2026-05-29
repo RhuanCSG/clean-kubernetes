@@ -1,6 +1,6 @@
 # Fase 03 — Networking
 
-**Camada:** rede | **Estimativa:** ~3 semanas | **Ambiente:** minikube
+**Camada:** rede | **Estimativa:** ~3 semanas | **Ambiente:** kind
 
 A rede do Kubernetes abstrai a complexidade de conectar Pods que podem morrer e renascer em qualquer nó. Esta fase explica como o tráfego flui — e por que às vezes não flui.
 
@@ -43,7 +43,7 @@ Pod A (10.244.x.1)  ou  Pod B (10.244.x.2)  ou  Pod C (10.244.x.3)
 
 Criar Service ClusterIP, fazer `kubectl exec` em um Pod cliente e acessar o backend via nome DNS do Service.
 
-Ver: `phases/03-networking/labs/lab.md` no repositório.
+Ver: `fases/03-networking/labs/lab.md` no repositório.
 
 ---
 

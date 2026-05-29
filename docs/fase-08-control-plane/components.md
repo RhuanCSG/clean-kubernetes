@@ -17,30 +17,41 @@ Responsabilidades:
 - Persistir objetos no etcd
 
 ```bash
-kubectl logs -n kube-system kube-apiserver-minikube
+kubectl logs -n kube-system kube-apiserver-k8s-study-control-plane
 ```
 
 ### etcd
 
 **A única fonte de verdade.** Banco de dados chave-valor distribuído onde o estado de todos os objetos do cluster é armazenado. Se o etcd parar, o cluster para de funcionar — mas Pods existentes continuam rodando.
 
-```bash
-# Verificar saúde do etcd (via kind)
-docker exec -it k8s-study-control-plane etcdctl \
-  --endpoints=https://127.0.0.1:2379 \
-  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-  --cert=/etc/kubernetes/pki/etcd/server.crt \
-  --key=/etc/kubernetes/pki/etcd/server.key \
-  endpoint health
-# Windows (PowerShell): substitua \ por ` (backtick) para quebra de linha
-```
+=== "Linux / macOS"
+    ```bash
+    # Verificar saúde do etcd (via kind)
+    docker exec -it k8s-study-control-plane etcdctl \
+      --endpoints=https://127.0.0.1:2379 \
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+      --cert=/etc/kubernetes/pki/etcd/server.crt \
+      --key=/etc/kubernetes/pki/etcd/server.key \
+      endpoint health
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # Verificar saúde do etcd (via kind)
+    docker exec -it k8s-study-control-plane etcdctl `
+      --endpoints=https://127.0.0.1:2379 `
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt `
+      --cert=/etc/kubernetes/pki/etcd/server.crt `
+      --key=/etc/kubernetes/pki/etcd/server.key `
+      endpoint health
+    ```
 
 ### kube-scheduler
 
 **O alocador de Pods.** Observa Pods recém-criados sem nó atribuído (`nodeName: ""`), decide onde colocá-los (baseado em resources, taints, affinity) e escreve o `nodeName` no Pod.
 
 ```bash
-kubectl logs -n kube-system kube-scheduler-minikube
+kubectl logs -n kube-system kube-scheduler-k8s-study-control-plane
 ```
 
 ### kube-controller-manager
@@ -54,7 +65,7 @@ kubectl logs -n kube-system kube-scheduler-minikube
 - E mais de 30 outros controllers
 
 ```bash
-kubectl logs -n kube-system kube-controller-manager-minikube
+kubectl logs -n kube-system kube-controller-manager-k8s-study-control-plane
 ```
 
 ### kubelet
@@ -85,20 +96,20 @@ kubectl logs -n kube-system -l k8s-app=kube-proxy
 
 ## Onde ficam os componentes
 
-No minikube e kind, os componentes do control plane rodam como **static Pods** — manifestos gerenciados diretamente pelo kubelet, fora da API normal do Kubernetes:
+No kind, os componentes do control plane rodam como **static Pods** — manifestos gerenciados diretamente pelo kubelet, fora da API normal do Kubernetes:
 
 ```bash
 # Ver os Pods do control plane
 kubectl get pods -n kube-system
-# kube-apiserver-minikube            Running
-# kube-controller-manager-minikube   Running
-# kube-scheduler-minikube            Running
-# etcd-minikube                      Running
-# kube-proxy-xxxxx                   Running  (um por nó)
-# coredns-xxxxx                      Running  (DNS)
+# kube-apiserver-k8s-study-control-plane            Running
+# kube-controller-manager-k8s-study-control-plane   Running
+# kube-scheduler-k8s-study-control-plane            Running
+# etcd-k8s-study-control-plane                      Running
+# kube-proxy-xxxxx                                  Running  (um por nó)
+# coredns-xxxxx                                     Running  (DNS)
 
-# Manifestos estáticos no nó (minikube)
-minikube ssh
+# Manifestos estáticos no nó (kind)
+docker exec -it k8s-study-control-plane bash
 ls /etc/kubernetes/manifests/
 # etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml
 ```

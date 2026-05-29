@@ -8,15 +8,35 @@ HPA escala automaticamente o número de réplicas de um Deployment (ou StatefulS
 
 O HPA precisa do metrics-server para coletar métricas de uso:
 
-```bash
-# Habilitar no minikube
-minikube addons enable metrics-server
+=== "Linux / macOS"
+    ```bash
+    # Instalar metrics-server
+    kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
-# Verificar instalação
-kubectl get pods -n kube-system | grep metrics-server
-# Windows (PowerShell): kubectl get pods -n kube-system | Select-String "metrics-server"
-kubectl top nodes     # deve retornar dados (não erro)
-```
+    # Adicionar flag para clusters locais (certificados autoassinados)
+    kubectl patch deployment metrics-server -n kube-system --type='json' \
+      -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+
+    # Verificar instalação
+    kubectl get pods -n kube-system | grep metrics-server
+    kubectl top nodes     # deve retornar dados (não erro)
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # Instalar metrics-server
+    kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+    # Adicionar flag para clusters locais (certificados autoassinados)
+    kubectl patch deployment metrics-server -n kube-system --type='json' `
+      -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+
+    # Verificar instalação
+    kubectl get pods -n kube-system | Select-String "metrics-server"
+    kubectl top nodes     # deve retornar dados (não erro)
+    ```
+
+A flag `--kubelet-insecure-tls` é necessária porque os certificados do kubelet no kind são autoassinados.
 
 ---
 
@@ -87,14 +107,21 @@ kubectl describe hpa app-hpa
 
 ## Gerando carga para testar
 
-```bash
-# Pod de teste que gera carga no serviço
-kubectl run load-test --image=busybox:1.36 --restart=Never -- \
-  sh -c "while true; do wget -q -O- http://minha-app-svc; done"
-# Windows (PowerShell): use backtick (`) no lugar de \ para quebra de linha:
-# kubectl run load-test --image=busybox:1.36 --restart=Never -- `
-#   sh -c "while true; do wget -q -O- http://minha-app-svc; done"
+=== "Linux / macOS"
+    ```bash
+    # Pod de teste que gera carga no serviço
+    kubectl run load-test --image=busybox:1.36 --restart=Never -- \
+      sh -c "while true; do wget -q -O- http://minha-app-svc; done"
+    ```
 
+=== "Windows (PowerShell)"
+    ```powershell
+    # Pod de teste que gera carga no serviço
+    kubectl run load-test --image=busybox:1.36 --restart=Never -- `
+      sh -c "while true; do wget -q -O- http://minha-app-svc; done"
+    ```
+
+```bash
 # Em outro terminal, observar o HPA escalar
 kubectl get hpa app-hpa -w
 ```

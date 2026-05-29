@@ -62,7 +62,7 @@ kubectl get daemonsets
 # Ver em quais nós o Pod está rodando
 kubectl get pods -l app=log-agent -o wide
 # NAME              READY   STATUS    NODE
-# log-agent-xkj2m   1/1     Running   minikube
+# log-agent-xkj2m   1/1     Running   k8s-study-worker
 ```
 
 `DESIRED` sempre igual ao número de nós elegíveis.

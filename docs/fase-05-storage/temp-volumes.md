@@ -56,7 +56,7 @@ volumes:
 
 ## hostPath
 
-Monta um diretório ou arquivo do **nó** onde o Pod está rodando. Funciona bem em clusters single-node (minikube), mas é problemático em multi-node.
+Monta um diretório ou arquivo do **nó** onde o Pod está rodando. Funciona bem em clusters locais (kind), mas é problemático em multi-node.
 
 ### Casos de uso (legítimos)
 

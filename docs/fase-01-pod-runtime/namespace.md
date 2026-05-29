@@ -63,9 +63,17 @@ kubectl get pods -A                  # atalho
 
 # Definir namespace padrão da sessão
 kubectl config set-context --current --namespace=staging
-kubectl config view --minify | grep namespace    # confirmar
-# Windows (PowerShell): kubectl config view --minify | Select-String "namespace"
 ```
+
+=== "Linux / macOS"
+    ```bash
+    kubectl config view --minify | grep namespace    # confirmar
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl config view --minify | Select-String "namespace"    # confirmar
+    ```
 
 ---
 

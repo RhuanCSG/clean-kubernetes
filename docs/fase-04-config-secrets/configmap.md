@@ -36,12 +36,25 @@ kubectl apply -f configmap.yaml
 
 # A partir de um arquivo existente
 kubectl create configmap nginx-config --from-file=nginx.conf
+```
 
-# A partir de valores literais
-kubectl create configmap app-config \
-  --from-literal=APP_ENV=producao \
-  --from-literal=LOG_LEVEL=info
+=== "Linux / macOS"
+    ```bash
+    # A partir de valores literais
+    kubectl create configmap app-config \
+      --from-literal=APP_ENV=producao \
+      --from-literal=LOG_LEVEL=info
+    ```
 
+=== "Windows (PowerShell)"
+    ```powershell
+    # A partir de valores literais
+    kubectl create configmap app-config `
+      --from-literal=APP_ENV=producao `
+      --from-literal=LOG_LEVEL=info
+    ```
+
+```bash
 # A partir de um diretório inteiro
 kubectl create configmap configs --from-file=./configs/
 ```
@@ -63,11 +76,24 @@ kubectl get configmap app-config -o yaml # YAML completo
 ```bash
 # Editar diretamente
 kubectl edit configmap app-config
-
-# Substituir completamente
-kubectl create configmap app-config --from-literal=LOG_LEVEL=debug \
-  --dry-run=client -o yaml | kubectl apply -f -
 ```
+
+!!! tip "Editor no Windows"
+    Por padrão, `kubectl edit` abre o Notepad no Windows. Para usar o VS Code: `$env:KUBE_EDITOR = "code --wait"` (execute antes de chamar `kubectl edit`).
+
+=== "Linux / macOS"
+    ```bash
+    # Substituir completamente
+    kubectl create configmap app-config --from-literal=LOG_LEVEL=debug \
+      --dry-run=client -o yaml | kubectl apply -f -
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # Substituir completamente
+    kubectl create configmap app-config --from-literal=LOG_LEVEL=debug `
+      --dry-run=client -o yaml | kubectl apply -f -
+    ```
 
 ### Propagação automática
 

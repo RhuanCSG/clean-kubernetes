@@ -1,6 +1,6 @@
 # Fase 06 — Controle de Acesso (RBAC)
 
-**Camada:** segurança | **Estimativa:** ~2 semanas | **Ambiente:** minikube
+**Camada:** segurança | **Estimativa:** ~2 semanas | **Ambiente:** kind
 
 RBAC (Role-Based Access Control) é o mecanismo de autorização do Kubernetes. Ele controla quem pode fazer o quê no cluster — tanto usuários humanos quanto aplicações rodando em Pods.
 
@@ -38,7 +38,7 @@ Subject     →  Role/ClusterRole   →  Resources + Verbs
 
 Criar ServiceAccount com permissão de leitura apenas, rodar um Pod com essa SA e confirmar via `kubectl auth can-i` que as permissões estão corretas.
 
-Ver: `phases/06-rbac/labs/lab.md` no repositório.
+Ver: `fases/06-rbac/labs/lab.md` no repositório.
 
 ---
 

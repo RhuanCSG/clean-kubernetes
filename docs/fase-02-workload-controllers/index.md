@@ -1,6 +1,6 @@
 # Fase 02 — Workload Controllers
 
-**Camada:** controllers | **Estimativa:** ~3 semanas | **Ambiente:** minikube
+**Camada:** controllers | **Estimativa:** ~3 semanas | **Ambiente:** kind
 
 Controllers são loops de reconciliação que garantem que o estado real do cluster corresponde ao estado desejado. Esta fase cobre os principais tipos de workload que você gerencia no dia a dia.
 
@@ -44,7 +44,7 @@ O `kube-controller-manager` roda todos esses loops simultaneamente. Você nunca 
 
 Executar rolling update de um Deployment, acompanhar com `kubectl rollout status` e fazer rollback com `kubectl rollout undo`.
 
-Ver: `phases/02-workload-controllers/labs/lab.md` no repositório.
+Ver: `fases/02-workload-controllers/labs/lab.md` no repositório.
 
 ---
 

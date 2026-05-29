@@ -38,7 +38,7 @@ Esse conhecimento é o que separa quem "sabe usar" de quem "sabe debugar inciden
 
 Inspecionar componentes, acompanhar a criação de um Pod via eventos, e simular um nó NotReady.
 
-Ver: `phases/08-control-plane/labs/lab.md` no repositório.
+Ver: `fases/08-control-plane/labs/lab.md` no repositório.
 
 ---
 

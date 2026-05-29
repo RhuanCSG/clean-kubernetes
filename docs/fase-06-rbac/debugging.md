@@ -27,14 +27,23 @@ kubectl logs forbidden-pod
 
 ```bash
 # 1. Confirmar que o erro é RBAC
-kubectl auth can-i list configmaps \
-  --as=system:serviceaccount:default:app-sa
+kubectl auth can-i list configmaps --as=system:serviceaccount:default:app-sa
 # no
+```
 
-# 2. Ver os bindings existentes para essa SA
-kubectl get rolebindings -n default -o yaml | grep -A5 app-sa
-# Windows (PowerShell): kubectl get rolebindings -n default -o yaml | Select-String -Context 0,5 "app-sa"
+Ver os bindings existentes para essa SA:
 
+=== "Linux / macOS"
+    ```bash
+    kubectl get rolebindings -n default -o yaml | grep -A5 app-sa
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl get rolebindings -n default -o yaml | Select-String -Context 0,5 "app-sa"
+    ```
+
+```bash
 # 3. Ver o Role vinculado
 kubectl describe rolebinding app-rolebinding
 # Role: app-role
@@ -58,10 +67,9 @@ rules:
 ### Cenário de prática
 
 ```bash
-kubectl apply -f phases/06-rbac/debugging/01-403-forbidden/broken.yaml
+kubectl apply -f fases/06-rbac/debugging/01-403-forbidden/broken.yaml
 kubectl logs forbidden-pod    # ver o erro 403
-kubectl auth can-i list configmaps \
-  --as=system:serviceaccount:default:app-sa
+kubectl auth can-i list configmaps --as=system:serviceaccount:default:app-sa
 ```
 
 ---
@@ -73,8 +81,7 @@ kubectl auth can-i list configmaps \
 A SA existe, mas não há RoleBinding associado.
 
 ```bash
-kubectl auth can-i get pods \
-  --as=system:serviceaccount:default:minha-sa
+kubectl auth can-i get pods --as=system:serviceaccount:default:minha-sa
 # no
 
 kubectl get rolebindings -n default
@@ -112,8 +119,19 @@ kubectl auth can-i <verb> <resource> --as=system:serviceaccount:<namespace>:<sa-
 kubectl auth can-i --list --as=system:serviceaccount:default:minha-sa
 
 # Inspecionar bindings
-kubectl get rolebindings,clusterrolebindings --all-namespaces | grep <sa-name>
-# Windows (PowerShell): kubectl get rolebindings,clusterrolebindings --all-namespaces | Select-String "<sa-name>"
+```
+
+=== "Linux / macOS"
+    ```bash
+    kubectl get rolebindings,clusterrolebindings --all-namespaces | grep <sa-name>
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl get rolebindings,clusterrolebindings --all-namespaces | Select-String "<sa-name>"
+    ```
+
+```bash
 kubectl describe rolebinding <nome>
 kubectl describe role <nome>
 ```

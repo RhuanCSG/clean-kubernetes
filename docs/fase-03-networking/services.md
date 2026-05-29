@@ -59,14 +59,15 @@ spec:
   type: NodePort
 ```
 
-No minikube:
 ```bash
-minikube service frontend-svc --url   # abre o túnel e retorna a URL de acesso
+# Acessar via port-forward
+kubectl port-forward service/frontend-svc 8080:80
+# Acesse: http://localhost:8080
 ```
 
 ### LoadBalancer
 
-Provisiona um load balancer externo (cloud). No minikube, precisa de `minikube tunnel`:
+Provisiona um load balancer externo (cloud). Em clusters locais com kind, o EXTERNAL-IP fica em `<pending>` — esse é o comportamento real fora de um ambiente cloud.
 
 ```yaml
 spec:
@@ -74,9 +75,20 @@ spec:
 ```
 
 ```bash
-minikube tunnel    # mantém o túnel aberto em outro terminal
-kubectl get service minha-app-svc   # aguardar EXTERNAL-IP aparecer
+kubectl get service minha-app-svc
+# NAME            TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+# minha-app-svc   LoadBalancer   10.96.x.x      <pending>     80:30080/TCP   1m
 ```
+
+Para testar localmente, use `port-forward`:
+
+```bash
+kubectl port-forward service/minha-app-svc 8080:80
+# Acesse: http://localhost:8080
+```
+
+!!! tip "EXTERNAL-IP em produção"
+    Em EKS, GKE ou AKS, o LoadBalancer provisiona um IP externo automaticamente via integração com o cloud provider. O `<pending>` em clusters locais é o comportamento esperado.
 
 ---
 
@@ -130,13 +142,27 @@ kubectl get pods --show-labels                  # compare com o selector do Serv
     ```bash
     # Verificar se o Service está selecionando os Pods corretos
     kubectl get endpoints <nome>
-    
-    # Se vazio, comparar selector do Service com labels dos Pods
-    kubectl describe service <nome> | grep Selector
-    # Windows (PowerShell): kubectl describe service <nome> | Select-String "Selector"
-    kubectl get pods --show-labels | grep <label>
-    # Windows (PowerShell): kubectl get pods --show-labels | Select-String "<label>"
     ```
+
+    === "Linux / macOS"
+        ```bash
+        kubectl describe service <nome> | grep Selector
+        ```
+
+    === "Windows (PowerShell)"
+        ```powershell
+        kubectl describe service <nome> | Select-String "Selector"
+        ```
+
+    === "Linux / macOS"
+        ```bash
+        kubectl get pods --show-labels | grep <label>
+        ```
+
+    === "Windows (PowerShell)"
+        ```powershell
+        kubectl get pods --show-labels | Select-String "<label>"
+        ```
 
 ---
 

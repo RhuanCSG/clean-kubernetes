@@ -38,15 +38,29 @@ spec:
 ```bash
 kubectl apply -f limitrange.yaml
 kubectl run sem-limits --image=nginx:1.25 --restart=Never
-kubectl describe pod sem-limits | grep -A6 "Limits:"
-# Windows (PowerShell): kubectl describe pod sem-limits | Select-String -Context 0,6 "Limits:"
-# Limits:
-#   cpu:     500m         ← injetado pelo LimitRange
-#   memory:  256Mi
-# Requests:
-#   cpu:     100m         ← injetado pelo LimitRange
-#   memory:  128Mi
 ```
+
+=== "Linux / macOS"
+    ```bash
+    kubectl describe pod sem-limits | grep -A6 "Limits:"
+    # Limits:
+    #   cpu:     500m         ← injetado pelo LimitRange
+    #   memory:  256Mi
+    # Requests:
+    #   cpu:     100m         ← injetado pelo LimitRange
+    #   memory:  128Mi
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe pod sem-limits | Select-String -Context 0,6 "Limits:"
+    # Limits:
+    #   cpu:     500m         ← injetado pelo LimitRange
+    #   memory:  256Mi
+    # Requests:
+    #   cpu:     100m         ← injetado pelo LimitRange
+    #   memory:  128Mi
+    ```
 
 ---
 

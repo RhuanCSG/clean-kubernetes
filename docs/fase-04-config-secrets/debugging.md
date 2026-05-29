@@ -76,7 +76,7 @@ envFrom:
 ### Cenário de prática
 
 ```bash
-kubectl apply -f phases/04-config-secrets/debugging/01-wrong-ref/broken.yaml
+kubectl apply -f fases/04-config-secrets/debugging/01-wrong-ref/broken.yaml
 kubectl get pod config-fail-pod
 kubectl describe pod config-fail-pod
 kubectl get configmaps

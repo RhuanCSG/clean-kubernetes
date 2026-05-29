@@ -1,6 +1,6 @@
 # Fase 05 — Storage
 
-**Camada:** armazenamento | **Estimativa:** ~2 semanas | **Ambiente:** minikube
+**Camada:** armazenamento | **Estimativa:** ~2 semanas | **Ambiente:** kind
 
 Containers são efêmeros por design — quando um Pod morre, os dados dentro do filesystem do container somem. Esta fase cobre como o Kubernetes abstrai armazenamento persistente.
 
@@ -40,7 +40,7 @@ Com StorageClass, o provisionamento do PV é automático — o Kubernetes cria o
 
 Criar PVC, montar em um Pod, escrever dados, deletar o Pod e confirmar que os dados persistem no Pod recriado.
 
-Ver: `phases/05-storage/labs/lab.md` no repositório.
+Ver: `fases/05-storage/labs/lab.md` no repositório.
 
 ---
 

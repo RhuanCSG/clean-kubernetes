@@ -8,11 +8,8 @@ Por padrão, todos os Pods do cluster podem se comunicar livremente — qualquer
 
 Uma NetworkPolicy seleciona Pods e define quais conexões de entrada (ingress) e saída (egress) são permitidas. **Todo tráfego não explicitamente permitido é negado** assim que pelo menos uma NetworkPolicy se aplica ao Pod.
 
-!!! warning "Requer CNI compatível"
-    NetworkPolicy só funciona se o plugin de rede (CNI) do cluster suportar. No minikube, habilite o Calico ou use `--cni=calico` ao criar o cluster. O CNI padrão do minikube não aplica NetworkPolicies.
-    ```bash
-    minikube start --cni=calico
-    ```
+!!! tip "CNI no kind"
+    O cluster kind deste repositório usa **Calico** como CNI (instalado no setup). NetworkPolicy funciona sem configuração adicional — basta aplicar o YAML e as regras são aplicadas.
 
 ---
 

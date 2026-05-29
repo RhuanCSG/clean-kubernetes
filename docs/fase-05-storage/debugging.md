@@ -32,7 +32,7 @@ kubectl describe pvc pvc-quebrado
 
 kubectl get storageclass
 # NAME                 PROVISIONER                    AGE
-# standard (default)   k8s.io/minikube-hostpath       1d
+# standard (default)   rancher.io/local-path          1d
 # (não existe "premium-ssd")
 ```
 
@@ -48,7 +48,7 @@ spec:
 ### Cenário de prática
 
 ```bash
-kubectl apply -f phases/05-storage/debugging/01-pvc-pending/broken.yaml
+kubectl apply -f fases/05-storage/debugging/01-pvc-pending/broken.yaml
 kubectl get pvc pvc-quebrado   # deve mostrar Pending
 kubectl describe pvc pvc-quebrado
 kubectl get storageclass

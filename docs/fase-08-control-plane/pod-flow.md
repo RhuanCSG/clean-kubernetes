@@ -54,7 +54,7 @@ No terminal 1 você vai ver, em sequência:
 
 ```
 REASON       MESSAGE
-Scheduled    Successfully assigned default/teste-fluxo to minikube
+Scheduled    Successfully assigned default/teste-fluxo to k8s-study-worker
 Pulling      Pulling image "nginx:1.25"
 Pulled       Successfully pulled image "nginx:1.25"
 Created      Created container teste-fluxo
@@ -69,16 +69,29 @@ Cada evento corresponde a uma etapa do fluxo.
 
 Para visualizar o fluxo de escrita no etcd (kind):
 
-```bash
-# Abrir watch no etcd
-docker exec -it k8s-study-control-plane etcdctl \
-  --endpoints=https://127.0.0.1:2379 \
-  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-  --cert=/etc/kubernetes/pki/etcd/server.crt \
-  --key=/etc/kubernetes/pki/etcd/server.key \
-  watch /registry/pods/default/ --prefix
-# Windows (PowerShell): substitua \ por ` (backtick) para quebra de linha
+=== "Linux / macOS"
+    ```bash
+    # Abrir watch no etcd
+    docker exec -it k8s-study-control-plane etcdctl \
+      --endpoints=https://127.0.0.1:2379 \
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+      --cert=/etc/kubernetes/pki/etcd/server.crt \
+      --key=/etc/kubernetes/pki/etcd/server.key \
+      watch /registry/pods/default/ --prefix
+    ```
 
+=== "Windows (PowerShell)"
+    ```powershell
+    # Abrir watch no etcd
+    docker exec -it k8s-study-control-plane etcdctl `
+      --endpoints=https://127.0.0.1:2379 `
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt `
+      --cert=/etc/kubernetes/pki/etcd/server.crt `
+      --key=/etc/kubernetes/pki/etcd/server.key `
+      watch /registry/pods/default/ --prefix
+    ```
+
+```bash
 # Em outro terminal, criar um Pod
 kubectl run observado --image=nginx:1.25 --restart=Never
 # O etcdctl mostrará as escritas: criação (nodeName=""), update (nodeName="worker"), update (Running)

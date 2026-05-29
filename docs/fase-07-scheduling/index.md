@@ -51,7 +51,7 @@ Para cada Pod em Pending:
 
 Aplicar LimitRange, adicionar taint em um nó, confirmar Pod em Pending e resolver com toleration.
 
-Ver: `phases/07-scheduling/labs/lab.md` no repositório.
+Ver: `fases/07-scheduling/labs/lab.md` no repositório.
 
 ---
 

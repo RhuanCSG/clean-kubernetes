@@ -50,12 +50,12 @@ strategy:
 ### Cenário de prática
 
 ```bash
-kubectl apply -f phases/02-workload-controllers/debugging/01-rolling-stuck/broken.yaml
+kubectl apply -f fases/02-workload-controllers/debugging/01-rolling-stuck/broken.yaml
 kubectl set image deployment/stuck-deploy app=nginx:1.25
 kubectl rollout status deployment/stuck-deploy   # observe travando
 
 # Após identificar o problema:
-kubectl apply -f phases/02-workload-controllers/debugging/01-rolling-stuck/solution.yaml
+kubectl apply -f fases/02-workload-controllers/debugging/01-rolling-stuck/solution.yaml
 ```
 
 ---
@@ -87,7 +87,7 @@ kubectl get pvc
 # 3. O PVC está Pending — verificar StorageClasses disponíveis
 kubectl get storageclass
 # NAME                 PROVISIONER
-# standard (default)   k8s.io/minikube-hostpath
+# standard (default)   rancher.io/local-path
 ```
 
 A StorageClass `nao-existe` não existe no cluster. O PVC não consegue ser provisionado, então o Pod não pode ser criado.
@@ -99,13 +99,13 @@ Mudar `storageClassName` no `volumeClaimTemplates` para uma StorageClass que exi
 ```yaml
 volumeClaimTemplates:
   - spec:
-      storageClassName: "standard"    # StorageClass que existe no minikube
+      storageClassName: "standard"    # StorageClass que existe no cluster
 ```
 
 ### Cenário de prática
 
 ```bash
-kubectl apply -f phases/02-workload-controllers/debugging/02-statefulset-pvc/broken.yaml
+kubectl apply -f fases/02-workload-controllers/debugging/02-statefulset-pvc/broken.yaml
 kubectl get pods -l app=db-debug
 kubectl describe pod db-debug-0
 kubectl get pvc

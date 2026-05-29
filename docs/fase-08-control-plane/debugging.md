@@ -100,25 +100,37 @@ kubectl get nodes
 # The connection to the server localhost:8443 was refused
 ```
 
-### Como investigar (minikube)
+### Como investigar (kind)
 
 ```bash
-minikube status
-# minikube: Running
-# cluster: Stopped   ← cluster parado
+# Verificar estado dos nós
+kubectl get nodes
 
-minikube logs | tail -20   # ver o que aconteceu
-# Windows (PowerShell): minikube logs | Select-Object -Last 20
+# Verificar containers do cluster
+docker ps --filter name=k8s-study
+# Se não aparecer nenhum container, o cluster não está rodando
 
-# Tentar reiniciar
-minikube start
+# Recriar o cluster
+kind delete cluster --name k8s-study
+kind create cluster --config setup/kind-config.yaml --name k8s-study
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 ```
+
+=== "Linux / macOS"
+    ```bash
+    kubectl logs -n kube-system kube-apiserver-k8s-study-control-plane --tail=20
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl logs -n kube-system kube-apiserver-k8s-study-control-plane --tail=20
+    ```
 
 ### Causas comuns
 
 | Causa | Como identificar |
 |---|---|
-| etcd parou | `kubectl logs -n kube-system etcd-minikube` |
+| etcd parou | `kubectl logs -n kube-system etcd-k8s-study-control-plane` |
 | Certificado expirou | Erro TLS nos logs do apiserver |
 | Memória insuficiente no host | apiserver OOMKilled pelo host OS |
 | Docker parou | `docker ps` retorna erro |
@@ -129,16 +141,16 @@ minikube start
 
 ```bash
 # Control plane (como static Pods)
-kubectl logs -n kube-system kube-apiserver-minikube --tail=50
-kubectl logs -n kube-system kube-scheduler-minikube --tail=50
-kubectl logs -n kube-system kube-controller-manager-minikube --tail=50
-kubectl logs -n kube-system etcd-minikube --tail=50
-
-# kubelet (no nó — minikube)
-minikube ssh
-journalctl -u kubelet -n 100
+kubectl logs -n kube-system kube-apiserver-k8s-study-control-plane --tail=50
+kubectl logs -n kube-system kube-scheduler-k8s-study-control-plane --tail=50
+kubectl logs -n kube-system kube-controller-manager-k8s-study-control-plane --tail=50
+kubectl logs -n kube-system etcd-k8s-study-control-plane --tail=50
 
 # kubelet (no nó — kind)
+docker exec -it k8s-study-control-plane bash
+journalctl -u kubelet -n 100
+
+# kubelet (no nó worker — kind)
 docker exec -it k8s-study-worker journalctl -u kubelet -n 100
 
 # kube-proxy (em todos os nós)
@@ -159,11 +171,21 @@ kubectl get nodes
 # 2. Estado dos componentes do control plane
 kubectl get pods -n kube-system
 kubectl get componentstatuses
+```
 
-# 3. Eventos recentes do cluster
-kubectl get events --all-namespaces --sort-by=.lastTimestamp | tail -20
-# Windows (PowerShell): kubectl get events --all-namespaces --sort-by=.lastTimestamp | Select-Object -Last 20
+Eventos recentes do cluster:
 
+=== "Linux / macOS"
+    ```bash
+    kubectl get events --all-namespaces --sort-by=.lastTimestamp | tail -20
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl get events --all-namespaces --sort-by=.lastTimestamp | Select-Object -Last 20
+    ```
+
+```bash
 # 4. Recursos no cluster
 kubectl top nodes
 

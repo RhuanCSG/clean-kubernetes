@@ -27,13 +27,23 @@ O Service existe, mas não está encaminhando tráfego para nenhum Pod.
 
 ### Como investigar
 
-```bash
-# 1. Ver o selector do Service
-kubectl describe service svc-quebrado | grep Selector
-# Windows (PowerShell): kubectl describe service svc-quebrado | Select-String "Selector"
-# Selector:  app=backend-v2
+Ver o selector do Service:
 
-# 2. Ver os labels dos Pods existentes
+=== "Linux / macOS"
+    ```bash
+    kubectl describe service svc-quebrado | grep Selector
+    # Selector:  app=backend-v2
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe service svc-quebrado | Select-String "Selector"
+    # Selector:  app=backend-v2
+    ```
+
+Ver os labels dos Pods existentes:
+
+```bash
 kubectl get pods --show-labels
 # NAME              LABELS
 # backend-xxx-yyy   app=backend   ← label é "backend", não "backend-v2"
@@ -54,7 +64,7 @@ spec:
 ### Cenário de prática
 
 ```bash
-kubectl apply -f phases/03-networking/debugging/01-empty-endpoints/broken.yaml
+kubectl apply -f fases/03-networking/debugging/01-empty-endpoints/broken.yaml
 kubectl get endpoints svc-quebrado
 kubectl describe service svc-quebrado
 kubectl get pods --show-labels
@@ -126,7 +136,7 @@ kubectl get pods -l app=backend      # Pods estão Running?
 ```bash
 kubectl get pods -n ingress-nginx
 # No resources found in ingress-nginx namespace.
-# → Instalar: minikube addons enable ingress
+# → Instalar: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 ```
 
 ---

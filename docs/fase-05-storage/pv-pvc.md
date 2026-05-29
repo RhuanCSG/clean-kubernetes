@@ -105,10 +105,16 @@ Define o que acontece com o PV quando o PVC é deletado:
 | `Recycle` | Deprecated — apagava os dados e disponibilizava o PV novamente |
 
 Para ver a política da StorageClass:
-```bash
-kubectl get storageclass standard -o yaml | grep reclaimPolicy
-# Windows (PowerShell): kubectl get storageclass standard -o yaml | Select-String "reclaimPolicy"
-```
+
+=== "Linux / macOS"
+    ```bash
+    kubectl get storageclass standard -o yaml | grep reclaimPolicy
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl get storageclass standard -o yaml | Select-String "reclaimPolicy"
+    ```
 
 ---
 

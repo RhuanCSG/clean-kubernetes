@@ -1,6 +1,6 @@
 # Fase 01 — Pod & Container Runtime
 
-**Camada:** runtime | **Estimativa:** ~2 semanas | **Ambiente:** minikube
+**Camada:** runtime | **Estimativa:** ~2 semanas | **Ambiente:** kind
 
 Esta é a fase mais importante. Tudo que vem depois — controllers, networking, storage — é construído sobre o Pod. Não avance sem ter clareza total aqui.
 
@@ -41,7 +41,7 @@ Isso permite padrões como o **sidecar**: um container principal e um container 
 
 Criar um Pod com initContainer, inspecionar com os comandos essenciais e resolver cenários de debugging.
 
-Ver: `phases/01-pod-runtime/labs/lab.md` no repositório.
+Ver: `fases/01-pod-runtime/labs/lab.md` no repositório.
 
 ---
 

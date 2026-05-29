@@ -1,21 +1,24 @@
-# Setup — kind multi-nó (Fases 7 e 8)
+# Setup — kind (Todas as Fases)
 
-kind (Kubernetes in Docker) cria clusters com múltiplos nós localmente, onde cada nó é um container Docker. É necessário para as Fases 7 e 8, onde comportamentos como taints, affinity e componentes do control plane só fazem sentido com mais de um nó.
-
----
-
-## Por que kind para as fases avançadas?
-
-| Recurso | minikube (single-node) | kind (multi-node) |
-|---|---|---|
-| Taints por nó | Não faz sentido | ✅ Essencial |
-| Pod affinity entre nós | ✅ Funciona mas não é útil | ✅ Comportamento real |
-| Simular nó NotReady | Limitado | ✅ `docker pause <nó>` |
-| Control plane separado dos workers | Não | ✅ Igual produção |
+kind (Kubernetes in Docker) cria clusters Kubernetes localmente onde cada nó é um container Docker. É o ambiente de prática para todas as 8 fases deste repositório.
 
 ---
 
-## Instalação
+## Pré-requisitos
+
+- Docker Desktop instalado e rodando
+- kubectl instalado
+
+---
+
+## Instalação do kind
+
+=== "Linux"
+
+    ```bash
+    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
+    chmod +x kind && sudo mv kind /usr/local/bin/kind
+    ```
 
 === "macOS"
 
@@ -29,13 +32,6 @@ kind (Kubernetes in Docker) cria clusters com múltiplos nós localmente, onde c
     winget install Kubernetes.kind
     ```
 
-=== "Linux"
-
-    ```bash
-    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
-    chmod +x kind && sudo mv kind /usr/local/bin/kind
-    ```
-
 Verificar:
 
 ```bash
@@ -45,15 +41,30 @@ kind version
 
 ---
 
-## Criando o cluster multi-nó
+## Criando o cluster
 
-O arquivo `setup/kind-config.yaml` (na raiz do repositório) define 1 control-plane e 2 workers:
+O arquivo `setup/kind-config.yaml` define 1 control-plane e 2 workers:
 
 ```yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  disableDefaultCNI: true    # necessário para instalar Calico (suporte a NetworkPolicy)
 nodes:
   - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP
   - role: worker
   - role: worker
 ```
@@ -64,11 +75,20 @@ Criar o cluster:
 kind create cluster --config setup/kind-config.yaml --name k8s-study
 ```
 
-Configurar o kubectl para usar este cluster:
+---
+
+## Instalando o CNI (Calico)
+
+O cluster foi criado sem CNI padrão. Instalar Calico antes de criar qualquer Pod:
 
 ```bash
-kubectl cluster-info --context kind-k8s-study
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+
+# Aguardar os pods do Calico ficarem Ready (~2 min)
+kubectl get pods -n calico-system -w
 ```
+
+Calico é necessário para a Fase 03 (NetworkPolicy). Sem ele, as regras de NetworkPolicy são ignoradas.
 
 ---
 
@@ -78,58 +98,111 @@ kubectl cluster-info --context kind-k8s-study
 kubectl get nodes
 ```
 
+Saída esperada (após Calico Ready):
+
 ```
 NAME                      STATUS   ROLES           AGE
-k8s-study-control-plane   Ready    control-plane   1m
-k8s-study-worker          Ready    <none>          1m
-k8s-study-worker2         Ready    <none>          1m
+k8s-study-control-plane   Ready    control-plane   2m
+k8s-study-worker          Ready    <none>          2m
+k8s-study-worker2         Ready    <none>          2m
 ```
 
 ---
 
-## Containers do cluster
+## Addons por fase
 
-Como cada nó é um container Docker, você pode inspecioná-los:
+Alguns recursos precisam ser instalados antes da fase correspondente.
 
-```bash
-docker ps --filter name=k8s-study
-# k8s-study-control-plane
-# k8s-study-worker
-# k8s-study-worker2
-```
-
-Para simular um nó com problema (usado na Fase 08):
+### Fase 03 — Ingress Controller
 
 ```bash
-docker pause k8s-study-worker      # pausa o container (simula falha do kubelet)
-docker unpause k8s-study-worker    # retoma
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+# Aguardar o controller ficar Ready
+kubectl get pods -n ingress-nginx -w
 ```
 
----
+Após instalar, Ingresses são acessíveis via `http://localhost`.
 
-## Removendo o cluster
+### Fase 07 — metrics-server (HPA)
 
-```bash
-kind delete cluster --name k8s-study
-```
+=== "Linux / macOS"
+
+    ```bash
+    kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+    kubectl patch deployment metrics-server -n kube-system --type='json' \
+      -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+    ```
+
+=== "Windows (PowerShell)"
+
+    ```powershell
+    kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+    kubectl patch deployment metrics-server -n kube-system --type='json' `
+      -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+    ```
+
+A flag `--kubelet-insecure-tls` é necessária no kind porque os certificados kubelet são autoassinados.
 
 ---
 
 ## Contexto kubectl
 
-kind configura um contexto no kubeconfig automaticamente. Para alternar entre minikube e kind:
+kind configura o contexto automaticamente. Para verificar:
 
 ```bash
+kubectl config current-context
+# kind-k8s-study
+
 kubectl config get-contexts
-kubectl config use-context kind-k8s-study
-kubectl config use-context minikube
 ```
 
-!!! warning "Atenção ao contexto"
-    Sempre verifique em qual cluster você está antes de aplicar YAMLs. `kubectl config current-context` mostra o contexto ativo.
+---
+
+## Comandos essenciais
+
+```bash
+kubectl get nodes                          # estado dos nós
+docker ps --filter name=k8s-study         # containers do cluster
+kind get clusters                          # clusters kind ativos
+```
+
+Acessar o shell de um nó:
+
+```bash
+docker exec -it k8s-study-control-plane bash   # control-plane
+docker exec -it k8s-study-worker bash          # worker
+```
+
+---
+
+## Resetando o ambiente
+
+Se o cluster ficar em estado inconsistente:
+
+```bash
+kind delete cluster --name k8s-study
+kind create cluster --config setup/kind-config.yaml --name k8s-study
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+```
+
+!!! tip "Dica de uso"
+    O cluster kind para automaticamente quando o Docker é encerrado. Para retomar, reinicie o Docker — o cluster volta ao estado anterior sem precisar recriar.
+
+---
+
+## Por que kind para todas as fases?
+
+| Recurso | kind |
+|---|---|
+| Topologia multi-nó | ✅ 1 control-plane + 2 workers |
+| NetworkPolicy (Calico) | ✅ Instalado no setup |
+| Ingress | ✅ nginx-ingress via kubectl apply |
+| Simular nó NotReady | ✅ `docker pause k8s-study-worker` |
+| Comportamento idêntico no Windows/Linux | ✅ Só Docker containers |
 
 ---
 
 ## Próximo
 
-➡️ [Fase 07 — Scheduling & Recursos](../fase-07-scheduling/index.md)
+➡️ [Fase 01 — Pod & Runtime](../fase-01-pod-runtime/index.md)

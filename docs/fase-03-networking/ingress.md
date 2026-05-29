@@ -19,10 +19,14 @@ Ingress define regras de roteamento HTTP/HTTPS para acessar Services dentro do c
 
 O objeto `Ingress` sozinho não faz nada. Ele precisa de um **IngressController** — um Pod que lê as regras e implementa o roteamento. O mais comum é o NGINX Ingress Controller.
 
-No minikube:
 ```bash
-minikube addons enable ingress
-kubectl get pods -n ingress-nginx   # aguardar o Pod ficar Running
+# Instalar nginx-ingress para kind (se ainda não instalado no setup)
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+# Aguardar o controller ficar Ready
+kubectl get pods -n ingress-nginx -w
+# NAME                                       READY   STATUS    RESTARTS   AGE
+# ingress-nginx-controller-xxx               1/1     Running   0          1m
 ```
 
 ---
@@ -66,7 +70,8 @@ spec:
 
     ```bash
     # Adicionar ao /etc/hosts (requer sudo)
-    echo "$(minikube ip)  app.local" | sudo tee -a /etc/hosts
+    # No kind, o Ingress fica acessível via localhost (127.0.0.1)
+    echo "127.0.0.1  app.local" | sudo tee -a /etc/hosts
 
     # Testar
     curl http://app.local
@@ -75,11 +80,9 @@ spec:
 === "Windows (PowerShell admin)"
 
     ```powershell
-    # Obter o IP do IngressController
-    $minikubeIp = minikube ip
-
     # Adicionar ao hosts (requer PowerShell como Administrador)
-    Add-Content -Path "C:\Windows\System32\drivers\etc\hosts" -Value "$minikubeIp  app.local"
+    # No kind, o Ingress fica acessível via localhost (127.0.0.1)
+    Add-Content -Path "C:\Windows\System32\drivers\etc\hosts" -Value "127.0.0.1  app.local"
 
     # Testar
     curl http://app.local
@@ -129,7 +132,7 @@ kubectl logs -n ingress-nginx <pod>      # logs do NGINX — mostra erros de con
 | `curl` retorna 404 | path errado ou backend Service não existe |
 | `curl` retorna 502/503 | Pod do backend não está Running ou Endpoints vazio |
 | `curl` retorna `Connection refused` | IngressController não está rodando |
-| Host não resolve | /etc/hosts não configurado ou IP do minikube errado |
+| Host não resolve | /etc/hosts não configurado ou não aponta para 127.0.0.1 |
 
 ---
 

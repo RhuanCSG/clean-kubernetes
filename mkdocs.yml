@@ -93,8 +93,7 @@ nav:
   - Roadmap: roadmap.md
   - Setup:
     - Visão Geral: setup/index.md
-    - minikube (Fases 1-6): setup/minikube.md
-    - kind multi-nó (Fases 7-8): setup/kind.md
+    - kind (Todas as Fases): setup/kind.md
   - "01. Pod & Runtime":
     - Visão Geral: fase-01-pod-runtime/index.md
     - Pod e Containers: fase-01-pod-runtime/pod.md

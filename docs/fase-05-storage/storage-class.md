@@ -44,14 +44,14 @@ allowVolumeExpansion: true                                 # permite aumentar o 
 
 ---
 
-## StorageClass no minikube
+## StorageClass no kind
 
-O minikube provisiona PVs usando `hostPath` (diretórios no nó):
+O kind provisiona PVs usando `local-path` (diretórios no nó via hostPath por baixo):
 
 ```bash
 kubectl get storageclass
 # NAME                 PROVISIONER                    RECLAIM POLICY   VOLUME BINDING MODE
-# standard (default)   k8s.io/minikube-hostpath       Delete           Immediate
+# standard (default)   rancher.io/local-path          Delete           WaitForFirstConsumer
 ```
 
 Qualquer PVC que referenciar `standard` (ou não especificar StorageClass) será provisionado automaticamente.
@@ -62,13 +62,19 @@ Qualquer PVC que referenciar `standard` (ou não especificar StorageClass) será
 
 Se um PVC não especifica `storageClassName`, a StorageClass marcada como padrão é usada:
 
-```bash
-# Ver qual é o padrão
-kubectl get storageclass | grep default
-# Windows (PowerShell): kubectl get storageclass | Select-String "default"
+Ver qual é o padrão:
 
-# PVC sem storageClassName usa o padrão automaticamente
-```
+=== "Linux / macOS"
+    ```bash
+    kubectl get storageclass | grep default
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl get storageclass | Select-String "default"
+    ```
+
+PVCs sem `storageClassName` usam o padrão automaticamente.
 
 ```yaml
 spec:

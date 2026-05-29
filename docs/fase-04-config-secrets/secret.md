@@ -77,17 +77,39 @@ Para gerar os valores:
 
 ## Criando Secrets
 
+=== "Linux / macOS"
+    ```bash
+    # A partir de valores literais (o kubectl faz o base64 automaticamente)
+    kubectl create secret generic db-secret \
+      --from-literal=password=minha-senha \
+      --from-literal=username=admin
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # A partir de valores literais (o kubectl faz o base64 automaticamente)
+    kubectl create secret generic db-secret `
+      --from-literal=password=minha-senha `
+      --from-literal=username=admin
+    ```
+
+=== "Linux / macOS"
+    ```bash
+    # A partir de um arquivo
+    kubectl create secret generic tls-cert \
+      --from-file=tls.crt=./cert.pem \
+      --from-file=tls.key=./key.pem
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # A partir de um arquivo
+    kubectl create secret generic tls-cert `
+      --from-file=tls.crt=./cert.pem `
+      --from-file=tls.key=./key.pem
+    ```
+
 ```bash
-# A partir de valores literais (o kubectl faz o base64 automaticamente)
-kubectl create secret generic db-secret \
-  --from-literal=password=minha-senha \
-  --from-literal=username=admin
-
-# A partir de um arquivo
-kubectl create secret generic tls-cert \
-  --from-file=tls.crt=./cert.pem \
-  --from-file=tls.key=./key.pem
-
 # Aplicar YAML (valores já em base64)
 kubectl apply -f secret.yaml
 ```
@@ -99,11 +121,19 @@ kubectl apply -f secret.yaml
 ```bash
 kubectl get secrets
 kubectl describe secret db-secret    # mostra as chaves mas NÃO os valores
-
-# Ver o valor decodificado de uma chave específica
-kubectl get secret db-secret -o jsonpath='{.data.password}' | base64 -d
-# Windows (PowerShell): kubectl get secret db-secret -o jsonpath='{.data.password}' | ForEach-Object { [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($_)) }
 ```
+
+=== "Linux / macOS"
+    ```bash
+    # Ver o valor decodificado de uma chave específica
+    kubectl get secret db-secret -o jsonpath='{.data.password}' | base64 -d
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    # Ver o valor decodificado de uma chave específica
+    kubectl get secret db-secret -o jsonpath='{.data.password}' | ForEach-Object { [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($_)) }
+    ```
 
 ---
 

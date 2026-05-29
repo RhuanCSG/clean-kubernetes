@@ -20,11 +20,21 @@ Pod com toleration: "Posso ignorar esse taint" → agendado
 # Adicionar taint
 kubectl taint nodes k8s-study-worker dedicated=gpu:NoSchedule
 #                   ↑ nó            ↑ key=value  ↑ effect
+```
 
-# Ver taints de todos os nós
-kubectl describe nodes | grep Taints
-# Windows (PowerShell): kubectl describe nodes | Select-String "Taints"
+Ver taints de todos os nós:
 
+=== "Linux / macOS"
+    ```bash
+    kubectl describe nodes | grep Taints
+    ```
+
+=== "Windows (PowerShell)"
+    ```powershell
+    kubectl describe nodes | Select-String "Taints"
+    ```
+
+```bash
 # Remover taint (note o "-" no final)
 kubectl taint nodes k8s-study-worker dedicated=gpu:NoSchedule-
 ```
